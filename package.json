@@ -18,6 +18,14 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/drawing_utils": "^0.3.1675466124",
+    "@mediapipe/face_mesh": "^0.4.1633559619",
+    "@tensorflow/tfjs": "^4.2.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.2.0",
+    "@vladmandic/face-api": "^1.7.10",
+    "bootstrap": "^5.2.3",
+    "bootstrap-icons": "^1.10.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -33,6 +41,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~4.7.2"
+    "typescript": "~4.7.2",
+    "@types/dom-speech-recognition":"^0.0.1"
   }
 }
