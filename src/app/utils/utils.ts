@@ -10,9 +10,9 @@ export const NameResponseTemplate = [
   'my name is',
   'my name',
   'name is',
-  'yes ',
-  'sure ',
-  'yeah ',
+  'yes',
+  'sure',
+  'yeah',
 ];
 
 export function isSafari() {

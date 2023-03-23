@@ -15,8 +15,5 @@ export class AppComponent {
   ) {
     // load model so they are ready to use
     this.emotionService.loadModels();
-    // this.emotionService
-    //   .detectTextExpression("I'm not feeling well")
-    //   .subscribe(() => {});
   }
 }

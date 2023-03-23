@@ -9,6 +9,8 @@ import * as faceapi from '@vladmandic/face-api';
 export class EmotionService {
   modelsPath = '/assets/models';
   detectedEmotion = new EventEmitter<any>();
+  textEmotion: string;
+  videoEmotion: string;
   constructor(private http: HttpClient) {
     this.loadModels();
   }
@@ -31,13 +33,27 @@ export class EmotionService {
 
   detectTextExpression(text: string) {
     const url = `${environment.huggingFace}${HUGGING_FACE.getEmotionInference}`;
-    return this.http.post(url, { inputs: text });
+    const sub = this.http.post(url, { inputs: text });
+    sub.subscribe((data) => {
+      // extract text emotion based on highest priority
+      this.textEmotion = this.getMax(data[0]);
+      console.log(data);
+    });
+    return sub;
   }
 
-  detectName(text) {
-    const url = `${environment.huggingFace}${HUGGING_FACE.getNameFromText}`;
-    return this.http.post(url, JSON.stringify({ inputs: text }));
+  getMax(data) {
+    if (!data) {
+      return null;
+    }
+    const max = Math.max(...(Object.values(data) as number[]));
+    return Object.keys(data).filter((key) => data[key] == max)[0];
   }
+
+  // detectName(text) {
+  //   const url = `${environment.huggingFace}${HUGGING_FACE.getNameFromText}`;
+  //   return this.http.post(url, JSON.stringify({ inputs: text }));
+  // }
 
   // detectName(){
   //   async function query(data) {
