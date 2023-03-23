@@ -1,0 +1,7 @@
+<ng-container *ngIf="isCameraActive">
+    <video #video autoplay></video>
+    <canvas #canvas id="canvas"
+    [width]="videoElement?.clientWidth"
+    [height]="videoElement?.clientHeight"
+    ></canvas>
+</ng-container>

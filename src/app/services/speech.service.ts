@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { MediaPermissionState } from './../utils/media.utils';
+import { EventEmitter, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -6,6 +7,7 @@ import { Injectable } from '@angular/core';
 export class SpeechService {
   audioStream!: MediaStream;
   speechRecognition!: SpeechRecognition;
+  micPermission = new EventEmitter<PermissionState>();
   constructor() {}
 
   get isSpeechSupported() {
@@ -26,9 +28,11 @@ export class SpeechService {
       .then(
         (stream) => {
           this.audioStream = stream;
+          this.micPermission.emit(MediaPermissionState.granted);
         },
         () => {
           console.log('Mic permission denied');
+          this.micPermission.emit(MediaPermissionState.denied);
         }
       );
   }
