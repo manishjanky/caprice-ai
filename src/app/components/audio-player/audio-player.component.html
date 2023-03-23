@@ -1,7 +1,6 @@
 <div class="audio-player">
     <div class="row">
-        <div class="col-12 col-md-3 col-lg-2">
-            <img [src]="audio?.image || '/assets/images/audio_player.jpg'">
+        <div class="col-12 col-md-3 col-lg-2 image" [style.background-image]="audio?.image">
         </div>
         <div class="col-12 col-md-9 col-lg-10">
             <div class="row">
@@ -26,5 +25,5 @@
         </div>
     </div>
 </div>
-<audio #audioref (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()" preload="metadata"
-    [src]="audio?.uri || audio?.mediaUrl || audio?.link"></audio>
+<audio #audioref (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()"
+    preload="metadata" [src]="audio?.uri || audio?.mediaUrl || audio?.link"></audio>

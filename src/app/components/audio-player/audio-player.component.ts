@@ -17,7 +17,9 @@ export class AudioPlayerComponent implements OnInit {
       (this.audioElement?.duration / 60).toFixed(2).replace('.', ':') || '0:00'
     );
   }
-
+  get image() {
+    return this.audio?.image || '/assets/images/audio_player.jpg';
+  }
   get audioElement(): HTMLAudioElement {
     return this.audioRef?.nativeElement;
   }
