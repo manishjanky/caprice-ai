@@ -1,0 +1,33 @@
+.main-content {
+  width: 100%;
+  position: relative;
+  background: #dddddd;
+  padding: 60px 0 0 0;
+
+  .icon-box {
+    padding: 60px 30px;
+    position: relative;
+    overflow: hidden;
+    background: #dddddd;
+    box-shadow: 0 0 29px 0 rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-size: 48px;
+  }
+
+  @media (min-width: 1200px) {
+    .icon-boxes:before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: calc(50% + 20px);
+      background-color: #fff;
+    }
+  }
+}
