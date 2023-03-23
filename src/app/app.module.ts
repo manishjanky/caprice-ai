@@ -10,6 +10,7 @@ import { JokeComponent } from './components/joke/joke.component';
 import { MemesComponent } from './components/memes/memes.component';
 import { MemeComponent } from './components/meme/meme.component';
 import { VideoComponent } from './components/video/video.component';
+import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { VideoComponent } from './components/video/video.component';
     MemesComponent,
     MemeComponent,
     VideoComponent,
+    AudioPlayerComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],

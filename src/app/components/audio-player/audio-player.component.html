@@ -1,0 +1,30 @@
+<div class="audio-player">
+    <div class="row">
+        <div class="col-12 col-md-3 col-lg-2">
+            <img [src]="audio?.image || '/assets/images/audio_player.jpg'">
+        </div>
+        <div class="col-12 col-md-9 col-lg-10">
+            <div class="row">
+                <div class="col-12">
+                    <div class="progress">
+                        <div class="progress-bar" [style.width]="playedTime"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row player-controls">
+                <div class="col-4">
+                    <i class="bi bi-skip-backward"></i>
+                </div>
+                <div class="col-4">
+                    <i class="bi" [ngClass]="{'bi-play': !isPlaying,'bi-pause-circel': isPlaying}"></i>
+                </div>
+                <div class="col-4">
+                    <i class="bi bi-skip-forward"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<audio #audioref (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()" preload="metadata"
+    [src]="audio?.uri || audio?.mediaUrl || audio?.link"></audio>
