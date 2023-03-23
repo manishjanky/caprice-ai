@@ -12,6 +12,7 @@ import { MemeComponent } from './components/meme/meme.component';
 import { VideoComponent } from './components/video/video.component';
 import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { HeaderComponent } from './components/header/header.component';
+import { CheerMeUpComponent } from './components/cheer-me-up/cheer-me-up.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { HeaderComponent } from './components/header/header.component';
     VideoComponent,
     AudioPlayerComponent,
     HeaderComponent,
+    CheerMeUpComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
