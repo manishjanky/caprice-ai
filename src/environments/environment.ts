@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  jokeApiUrl: 'https://v2.jokeapi.dev',
+  memeApiUrl: 'https://meme-api.com',
+  huggingFace: 'https://api-inference.huggingface.co',
+  saavanUrl: 'https://saavn.me',
+  zenQuoteUrl:'https://zenquotes.io'
 };
 
 /*

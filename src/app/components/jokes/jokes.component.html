@@ -1,0 +1,4 @@
+<ng-container *ngIf="jokes?.length">
+    <app-joke [joke]="joke" *ngFor="let joke of jokes"></app-joke>
+    <button class="btn btn-primary mt-3" (click)="getJoke()">One more</button>
+</ng-container>

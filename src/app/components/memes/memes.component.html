@@ -1,0 +1,4 @@
+<ng-container *ngIf="memes?.length">
+    <app-meme [meme]="meme" *ngFor="let meme of memes"></app-meme>
+    <button class="btn btn-primary mt-3" (click)="getMeme()">One more</button>
+</ng-container>
