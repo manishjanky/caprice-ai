@@ -1,7 +1,6 @@
-<ng-container *ngIf="isCameraActive">
-    <video #video autoplay></video>
-    <canvas #canvas id="canvas"
-    [width]="videoElement?.clientWidth"
-    [height]="videoElement?.clientHeight"
-    ></canvas>
+<ng-container>
+    <div class="position-relative shadow">
+        <video #video autoplay class="shadow rounded"></video>
+        <canvas *ngIf="isCameraActive" #canvas id="canvas" [width]="videoElement?.clientWidth" [height]="videoElement?.clientHeight"></canvas>
+    </div>
 </ng-container>

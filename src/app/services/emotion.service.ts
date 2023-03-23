@@ -1,13 +1,14 @@
 import { HUGGING_FACE } from './../utils/api.utils';
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import * as faceapi from '@vladmandic/face-api';
 @Injectable({
   providedIn: 'root',
 })
 export class EmotionService {
   modelsPath = '/assets/models';
+  detectedEmotion = new EventEmitter<any>();
   constructor(private http: HttpClient) {
     this.loadModels();
   }
@@ -22,7 +23,11 @@ export class EmotionService {
       minConfidence: 0.3,
       maxResults: 1,
     });
-    return await faceapi.detectSingleFace(input, ssdNet).withFaceExpressions();
+    const expression = await faceapi
+      .detectSingleFace(input, ssdNet)
+      .withFaceExpressions();
+    this.detectedEmotion.emit(expression);
+    alert(expression);
   }
 
   detectTextExpression(text: string) {

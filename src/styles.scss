@@ -7,7 +7,12 @@
   --color-primary-text: #effaf6;
 }
 
-body{
-    color: var(--color-primary-text);
-
+body {
+  color: var(--color-primary-text);
+}
+.page-section-content {
+  width: 100%;
+  position: relative;
+  background: var(--color-primary);
+  padding: 60px 0 0 0;
 }
