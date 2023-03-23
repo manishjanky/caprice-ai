@@ -1,5 +1,5 @@
 <ng-container>
-    <div class="position-relative shadow">
+    <div class="position-relative rounded">
         <video #video autoplay class="shadow rounded"></video>
         <canvas *ngIf="isCameraActive" #canvas id="canvas" [width]="videoElement?.clientWidth" [height]="videoElement?.clientHeight"></canvas>
     </div>

@@ -12,7 +12,12 @@ export class CheerMeUpComponent implements OnInit {
 
   ngOnInit(): void {
     this.emotionService.detectedEmotion.subscribe((emotion) => {
-      this.emotion = emotion;
+      const max = Math.max(
+        ...(Object.values(emotion?.expressions) as number[])
+      );
+      this.emotion = Object.keys(emotion?.expressions).filter(
+        (key) => emotion?.expressions[key] == max
+      )[0];
     });
   }
 }

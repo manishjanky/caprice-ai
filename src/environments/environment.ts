@@ -8,7 +8,8 @@ export const environment = {
   memeApiUrl: 'https://meme-api.com',
   huggingFace: 'https://api-inference.huggingface.co',
   saavanUrl: 'https://saavn.me',
-  zenQuoteUrl:'https://zenquotes.io'
+  zenQuoteUrl:'https://zenquotes.io',
+  // 6883e31a16ed482fadc1c780d7b150bf
 };
 
 /*

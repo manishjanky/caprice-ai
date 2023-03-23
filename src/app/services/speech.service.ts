@@ -8,7 +8,17 @@ export class SpeechService {
   audioStream!: MediaStream;
   speechRecognition!: SpeechRecognition;
   micPermission = new EventEmitter<PermissionState>();
+  speechResults = new EventEmitter<SpeechRecognitionEvent>();
+  _usersName: string;
   constructor() {}
+
+  set usersName(name) {
+    this._usersName = name;
+  }
+  
+  get usersName() {
+    return this._usersName;
+  }
 
   get isSpeechSupported() {
     return 'speechSynthesis' in window;
@@ -68,7 +78,9 @@ export class SpeechService {
     this.speechRecognition.stop();
   }
 
-  recognizeSpeech = (audioEvent: SpeechRecognitionEvent) => {};
+  recognizeSpeech = (audioEvent: SpeechRecognitionEvent) => {
+    this.speechResults.emit(audioEvent);
+  };
 
   getSupportedVoices() {
     if (!this.isSpeechSupported) {

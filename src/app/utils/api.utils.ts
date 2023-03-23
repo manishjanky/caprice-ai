@@ -8,7 +8,8 @@ export const MEME_API = {
 };
 
 export const HUGGING_FACE = {
-  getInference: '/models/arpanghoshal/EmoRoBERTa',
+  getEmotionInference: '/models/arpanghoshal/EmoRoBERTa',
+  getNameFromText:'/models/opensource/extract_names'
 };
 
 export const SAAVAN_API = {

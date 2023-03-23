@@ -27,11 +27,30 @@ export class EmotionService {
       .detectSingleFace(input, ssdNet)
       .withFaceExpressions();
     this.detectedEmotion.emit(expression);
-    alert(expression);
   }
 
   detectTextExpression(text: string) {
-    const url = `${environment.huggingFace}/${HUGGING_FACE.getInference}`;
+    const url = `${environment.huggingFace}${HUGGING_FACE.getEmotionInference}`;
     return this.http.post(url, { inputs: text });
   }
+
+  detectName(text) {
+    const url = `${environment.huggingFace}${HUGGING_FACE.getNameFromText}`;
+    return this.http.post(url, JSON.stringify({ inputs: text }));
+  }
+
+  // detectName(){
+  //   async function query(data) {
+  //     const response = await fetch(
+  //       "https://api-inference.huggingface.co/models/dslim/bert-base-NER",
+  //       {
+  //         headers: { Authorization: "Bearer {API_TOKEN}" },
+  //         method: "POST",
+  //         body: JSON.stringify(data),
+  //       }
+  //     );
+  //     const result = await response.json();
+  //     return result;
+  //   }
+  // }
 }
