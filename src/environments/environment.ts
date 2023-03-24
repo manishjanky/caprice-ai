@@ -9,6 +9,7 @@ export const environment = {
   huggingFace: 'https://api-inference.huggingface.co',
   saavanUrl: 'https://saavn.me',
   zenQuoteUrl:'https://zenquotes.io',
+  huggingFaceKey: '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',
   // 6883e31a16ed482fadc1c780d7b150bf
 };
 
