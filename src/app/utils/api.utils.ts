@@ -11,6 +11,7 @@ export const HUGGING_FACE = {
   getEmotionInference: '/models/arpanghoshal/EmoRoBERTa',
   getNameFromText: '/models/opensource/extract_names',
   msChatModel: '/models/microsoft/DialogGPT-large',
+  generateImage: '/models/cloudqi/cqi_text_to_image_pt_v0',
 };
 
 export const SAAVAN_API = {

@@ -19,6 +19,7 @@ export enum SPEECH_RECOGNITION_INTENT {
   Joke,
   Meme,
   Music,
+  Art
 }
 
 export function isSafari() {

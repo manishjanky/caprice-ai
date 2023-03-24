@@ -1,7 +1,7 @@
 import { EmotionFrom } from './../utils/enum';
 import { HUGGING_FACE } from './../utils/api.utils';
 import { environment } from './../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import * as faceapi from '@vladmandic/face-api';
 @Injectable({
@@ -37,7 +37,12 @@ export class EmotionService {
 
   detectTextExpression(text: string) {
     const url = `${environment.huggingFace}${HUGGING_FACE.getEmotionInference}`;
-    const sub = this.http.post(url, { inputs: text });
+    let headers = new HttpHeaders();
+    headers = headers.append(
+      'Authorization',
+      `Bearer ${environment.huggingFaceKey}`
+    );
+    const sub = this.http.post(url, { inputs: text }, { headers });
     sub.subscribe((data) => {
       // extract text emotion based on highest priority
       this.textEmotion = this.getMax(data[0]);

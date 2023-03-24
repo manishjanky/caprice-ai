@@ -36,6 +36,16 @@
                             </div>
                         </ng-template>
                     </li>
+                    <li [ngbNavItem]="4" class="nav-item">
+                        <a ngbNavLink class="nav-link">AI Art</a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <app-create-art></app-create-art>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
                 </ul>
 
                 <div [ngbNavOutlet]="nav" class="mt-2"></div>

@@ -13,6 +13,8 @@ import { AudioPlayerComponent } from './components/audio-player/audio-player.com
 import { HeaderComponent } from './components/header/header.component';
 import { CheerMeUpComponent } from './components/cheer-me-up/cheer-me-up.component';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { CreateArtComponent } from './components/create-art/create-art.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,15 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
     AudioPlayerComponent,
     HeaderComponent,
     CheerMeUpComponent,
+    CreateArtComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgbNavModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    NgbNavModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
