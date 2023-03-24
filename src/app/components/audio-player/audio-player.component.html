@@ -22,14 +22,23 @@
                 </div>
             </div>
             <div class="row player-controls">
-                <div class="col-4 d-flex justify-content-center">
+                <div class="col-2 d-flex justify-content-center">
                     <i class="bi bi-skip-backward"></i>
                 </div>
-                <div class="col-4 d-flex justify-content-center">
+                <div class="col-2 d-flex justify-content-center">
                     <i class="bi" [ngClass]="{'bi-play': !isPlaying,'bi-pause-circel': isPlaying}"></i>
                 </div>
-                <div class="col-4 d-flex justify-content-center">
+                <div class="col-2 d-flex justify-content-center">
                     <i class="bi bi-skip-forward"></i>
+                </div>
+                <div class="col-6">
+                    <div class="volume-controls d-flex align-items-center position-relative ">
+                        <i class="bi bi-volume-up"></i>
+                        <input #volumeRange [(ngModel)]="volume" (change)="volumeChange()" type="range" min="0" max="10"
+                            class="form-range" id="volume">
+                        <span *ngIf="volumeRange" [style.width]="activeVolume" class="active-volume"></span>
+                    </div>
+
                 </div>
             </div>
 

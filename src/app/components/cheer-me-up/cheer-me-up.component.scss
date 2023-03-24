@@ -2,10 +2,14 @@
   padding-bottom: 15px;
   padding-top: 15px;
 
-  .nav-link{
+  .fun-div {
+    background-color: transparent;
+    padding-top: 10px;
+  }
+  .nav-link {
     color: var(--color-primary-text);
 
-    &.active{
+    &.active {
       background-color: transparent;
     }
   }

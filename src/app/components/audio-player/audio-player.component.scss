@@ -3,6 +3,7 @@
   padding: 2px;
   border-radius: 15px;
   min-height: 100px;
+  color: var(--color-primary);
 
   .image {
     background-image: url(/assets/images/audio_player.jpeg);
@@ -15,8 +16,23 @@
 
   .player-controls {
     font-size: 30px;
-  }
+    .volume-controls{
+      padding-right: 5px;
+      .form-range{
+        width: calc(100% - 30px);
+      }
+      .active-volume {
+        display: block;
+        position: absolute;
+        background-color: var(--color-primary);
+        height: 0.5rem;
+        left:30px;
+        border-radius: 0.5rem;
+      }
+    }
 
+  }
+ 
   .audio-detail,
   .audio-progress {
     padding-right: 5px;
