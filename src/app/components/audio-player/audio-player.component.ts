@@ -48,20 +48,19 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['audioList']?.currentValue) {
-      if (changes['audioList'].previousValue) {
-        this.audioList = [
-          ...changes['audioList'].currentValue,
-          ...changes['audioList'].previousValue,
-        ];
-      } else {
-        this.audioList = [...changes['audioList'].currentValue];
-      }
-    }
-    if (!this.audio) {
-      this.audio = this.audioList[0];
-      this.history.push(this.audio);
-    }
+    // if (changes['audioList']?.currentValue) {
+    //   if (changes['audioList'].previousValue) {
+    //     this.audioList = [
+    //       ...changes['audioList'].currentValue,
+    //       ...changes['audioList'].previousValue,
+    //     ];
+    //   } else {
+    //     this.audioList = [...changes['audioList'].currentValue];
+    //   }
+    // }
+
+    this.audio = this.audioList[0];
+    this.history.push(this.audio);
   }
 
   playTimeUpdated() {
@@ -79,6 +78,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   }
 
   next() {
+    this.audioElement.pause();
     let currentIndex = this.history.indexOf(this.audio);
     if (currentIndex > -1 && currentIndex < this.history.length - 1) {
       this.audio = this.audioList[currentIndex + 1];
@@ -93,11 +93,12 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   }
 
   previous() {
+    this.audioElement.pause();
     const currentIndex = this.history.indexOf(this.audio);
-    console.log(currentIndex);
     if (currentIndex > -1 && currentIndex <= this.history.length - 1) {
       this.audio = this.history[currentIndex - 1];
     }
+    this.audioElement.play();
   }
 
   onEnd() {
