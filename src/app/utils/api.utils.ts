@@ -9,7 +9,8 @@ export const MEME_API = {
 
 export const HUGGING_FACE = {
   getEmotionInference: '/models/arpanghoshal/EmoRoBERTa',
-  getNameFromText:'/models/opensource/extract_names'
+  getNameFromText: '/models/opensource/extract_names',
+  msChatModel: '/models/microsoft/DialogGPT-large',
 };
 
 export const SAAVAN_API = {

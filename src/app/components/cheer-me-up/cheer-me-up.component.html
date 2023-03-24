@@ -5,7 +5,40 @@
                 <app-video></app-video>
             </div>
             <div class="col-12 col-lg-6 order-2 order-lg-1">
-                {{emotion | json}}
+                <!-- {{emotion | json}} -->
+
+                <ul ngbNav #nav="ngbNav" class="nav nav-tabs">
+                    <li [ngbNavItem]="1" class="nav-item">
+                        <a ngbNavLink class="nav-link">Music</a>
+                        <ng-template ngbNavContent>
+                            <p>
+                                Music
+                            </p>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2" class="nav-item">
+                        <a ngbNavLink class="nav-link">Jokes</a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <app-jokes></app-jokes>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="3" class="nav-item">
+                        <a ngbNavLink class="nav-link">Memes</a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <app-memes></app-memes>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                </ul>
+
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
             </div>
 
         </div>

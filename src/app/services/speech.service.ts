@@ -60,6 +60,7 @@ export class SpeechService {
     const speechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     this.speechRecognition = new speechRecognition();
+    this.speechRecognition.lang = "en-US";
     this.speechRecognition.onresult = this.recognizeSpeech;
   }
 

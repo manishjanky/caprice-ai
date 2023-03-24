@@ -5,4 +5,5 @@ export const environment = {
   huggingFace: 'https://api-inference.huggingface.co',
   saavanUrl: 'https://saavn.me',
   zenQuoteUrl: 'https://zenquotes.io',
+  huggingFaceKey: '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',
 };

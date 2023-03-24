@@ -1,3 +1,4 @@
+import { EmotionFrom } from './../utils/enum';
 import { HUGGING_FACE } from './../utils/api.utils';
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -8,7 +9,7 @@ import * as faceapi from '@vladmandic/face-api';
 })
 export class EmotionService {
   modelsPath = '/assets/models';
-  detectedEmotion = new EventEmitter<any>();
+  detectedEmotion = new EventEmitter<{ emotion: string; from: EmotionFrom }>();
   textEmotion: string;
   videoEmotion: string;
   constructor(private http: HttpClient) {
@@ -28,7 +29,10 @@ export class EmotionService {
     const expression = await faceapi
       .detectSingleFace(input, ssdNet)
       .withFaceExpressions();
-    this.detectedEmotion.emit(expression);
+    this.detectedEmotion.emit({
+      emotion: this.getMax(expression?.expressions),
+      from: EmotionFrom.video,
+    });
   }
 
   detectTextExpression(text: string) {
@@ -37,7 +41,10 @@ export class EmotionService {
     sub.subscribe((data) => {
       // extract text emotion based on highest priority
       this.textEmotion = this.getMax(data[0]);
-      console.log(data);
+      this.detectedEmotion.emit({
+        emotion: this.textEmotion,
+        from: EmotionFrom.video,
+      });
     });
     return sub;
   }

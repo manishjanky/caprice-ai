@@ -12,6 +12,7 @@ import { VideoComponent } from './components/video/video.component';
 import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { HeaderComponent } from './components/header/header.component';
 import { CheerMeUpComponent } from './components/cheer-me-up/cheer-me-up.component';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { CheerMeUpComponent } from './components/cheer-me-up/cheer-me-up.compone
     HeaderComponent,
     CheerMeUpComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, NgbNavModule],
   providers: [],
   bootstrap: [AppComponent],
 })

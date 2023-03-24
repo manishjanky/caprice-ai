@@ -15,3 +15,6 @@ body {
   position: relative;
   background: var(--color-primary);
 }
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

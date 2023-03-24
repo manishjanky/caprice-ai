@@ -11,8 +11,8 @@ export class CheerMeUpComponent implements OnInit {
   constructor(private emotionService: EmotionService) {}
 
   ngOnInit(): void {
-    this.emotionService.detectedEmotion.subscribe((emotion) => {
-      this.emotion = this.emotionService.getMax(emotion?.expressions);
+    this.emotionService.detectedEmotion.subscribe((emotion: any) => {
+      this.emotion = emotion?.emotion;
     });
   }
 }
