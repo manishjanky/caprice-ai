@@ -1,6 +1,12 @@
 import { EmotionService } from './../../services/emotion.service';
 import { VideoService } from './../../services/video.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MediaPermissionState } from 'src/app/utils/media.utils';
 import {
   FaceMesh,
@@ -20,6 +26,7 @@ import { FaceMeshConfig } from 'src/app/utils/mediapipe.utils';
 import { Camera } from '@mediapipe/camera_utils';
 import { drawConnectors } from '@mediapipe/drawing_utils';
 import { isSafari } from 'src/app/utils/utils';
+import { draw, resizeResults } from '@vladmandic/face-api';
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
@@ -35,6 +42,7 @@ export class VideoComponent implements OnInit {
   constructor(
     private videoService: VideoService,
     private emotionService: EmotionService,
+    private cdref: ChangeDetectorRef
   ) {
     this.videoService.cameraPermission.subscribe(
       (state: MediaPermissionState) => {
@@ -67,16 +75,14 @@ export class VideoComponent implements OnInit {
 
   detectEmotion() {
     this.setUpFaceMesh();
-    setTimeout(() => {
-      this.emotionService.detectFaceExpression(this.videoElement);
+    setTimeout(async () => {
+      await this.emotionService.detectFaceExpression(this.videoElement);
+      this.drawMesh();
     }, 1000);
   }
 
   async setUpFaceMesh() {
     if (isSafari()) {
-      // this.toastService.info(
-      //   'Safari does not support Media pipe face mesh. Please use chrome instead.'
-      // );
       return;
     }
     const config = {
@@ -98,8 +104,31 @@ export class VideoComponent implements OnInit {
     });
     camera.start();
   }
-
+  clearFaceMesh() {
+    const ctx = this.canvasElement.getContext('2d');
+    ctx.save();
+    ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+  }
+  drawMeshNonSafari() {
+    const detectionsForSize = resizeResults(this.emotionService.videoEmotion, {
+      width: this.videoElement.clientWidth,
+      height: this.videoElement.clientHeight,
+    });
+    // draw them into a canvas
+    setTimeout(() => {
+      draw.drawFaceLandmarks(this.canvasElement, detectionsForSize);
+      draw.drawDetections(this.canvasElement, detectionsForSize);
+    }, 100);
+    setTimeout(() => {
+      this.clearFaceMesh();
+    }, 2000);
+  }
   drawMesh() {
+    if (isSafari()) {
+      this.drawMeshNonSafari();
+      this.cdref.markForCheck();
+      return;
+    }
     this.isMeshVisible = false;
     const ctx = this.canvasElement.getContext('2d');
     ctx.save();

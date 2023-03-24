@@ -26,8 +26,9 @@ export class AudioPlayerComponent implements OnInit {
   }
 
   get activeVolume() {
-    // alert(`${this.volumeRange?.nativeElement?.width * (this.volume / 10) - 42}px`);
-    return `${this.volumeRange?.nativeElement.clientWidth * (this.volume / 10) - 2}px`;
+    const val =
+      this.volumeRange?.nativeElement.clientWidth * (this.volume / 10);
+    return !isNaN(val) ? `${val - 2}px` : '0px';
   }
   ngOnInit(): void {}
 

@@ -11,14 +11,16 @@ export class EmotionService {
   modelsPath = '/assets/models';
   detectedEmotion = new EventEmitter<{ emotion: string; from: EmotionFrom }>();
   textEmotion: string;
-  videoEmotion: string;
+  videoEmotion: any;
   constructor(private http: HttpClient) {
     this.loadModels();
   }
 
   async loadModels() {
     await faceapi.loadSsdMobilenetv1Model(this.modelsPath);
+    await faceapi.loadFaceLandmarkModel(this.modelsPath);
     await faceapi.loadFaceExpressionModel(this.modelsPath);
+
   }
 
   async detectFaceExpression(input: HTMLVideoElement) {
@@ -26,13 +28,15 @@ export class EmotionService {
       minConfidence: 0.3,
       maxResults: 1,
     });
-    const expression = await faceapi
+    this.videoEmotion = await faceapi
       .detectSingleFace(input, ssdNet)
+      .withFaceLandmarks()
       .withFaceExpressions();
     this.detectedEmotion.emit({
-      emotion: this.getMax(expression?.expressions),
+      emotion: this.getMax(this.videoEmotion?.expressions),
       from: EmotionFrom.video,
     });
+    return this.videoEmotion;
   }
 
   detectTextExpression(text: string) {
