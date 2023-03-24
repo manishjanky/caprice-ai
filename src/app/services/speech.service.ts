@@ -1,21 +1,23 @@
 import { MediaPermissionState } from './../utils/media.utils';
 import { EventEmitter, Injectable } from '@angular/core';
+import { SPEECH_RECOGNITION_INTENT } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SpeechService {
+  _usersName: string;
   audioStream!: MediaStream;
   speechRecognition!: SpeechRecognition;
+  recognitionIntent: SPEECH_RECOGNITION_INTENT;
   micPermission = new EventEmitter<PermissionState>();
   speechResults = new EventEmitter<SpeechRecognitionEvent>();
-  _usersName: string;
   constructor() {}
 
   set usersName(name) {
     this._usersName = name;
   }
-  
+
   get usersName() {
     return this._usersName;
   }
@@ -60,7 +62,7 @@ export class SpeechService {
     const speechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     this.speechRecognition = new speechRecognition();
-    this.speechRecognition.lang = "en-US";
+    this.speechRecognition.lang = 'en-US';
     this.speechRecognition.onresult = this.recognizeSpeech;
   }
 

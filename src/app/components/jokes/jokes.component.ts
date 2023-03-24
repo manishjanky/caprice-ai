@@ -1,5 +1,7 @@
+import { SpeechService } from './../../services/speech.service';
 import { JokeService } from './../../services/joke.service';
 import { Component, OnInit } from '@angular/core';
+import { SPEECH_RECOGNITION_INTENT } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-jokes',
@@ -8,10 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JokesComponent implements OnInit {
   jokes: any[] = [];
-  constructor(private jokeService: JokeService) {}
+  constructor(
+    private jokeService: JokeService,
+    private speechService: SpeechService
+  ) {}
 
   ngOnInit(): void {
     this.getJoke();
+    this.speechService.recognitionIntent = SPEECH_RECOGNITION_INTENT.Joke;
   }
 
   getJoke() {

@@ -15,6 +15,11 @@ export const NameResponseTemplate = [
   'yeah',
 ];
 
+export enum SPEECH_RECOGNITION_INTENT {
+  Joke,
+  Meme,
+  Music,
+}
 
 export function isSafari() {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
