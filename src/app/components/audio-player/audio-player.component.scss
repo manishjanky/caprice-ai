@@ -16,9 +16,9 @@
 
   .player-controls {
     font-size: 30px;
-    .volume-controls{
+    .volume-controls {
       padding-right: 5px;
-      .form-range{
+      .form-range {
         width: calc(100% - 30px);
       }
       .active-volume {
@@ -26,13 +26,13 @@
         position: absolute;
         background-color: var(--color-primary);
         height: 0.5rem;
-        left:30px;
+        left: 30px;
         border-radius: 0.5rem;
+        pointer-events: none;
       }
     }
-
   }
- 
+
   .audio-detail,
   .audio-progress {
     padding-right: 5px;

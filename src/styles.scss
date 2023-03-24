@@ -40,11 +40,6 @@ input[type="range"] {
   &.form-range {
     &::-webkit-slider-runnable-track {
       background-color: rgba(#1d6d86, 0.4);
-      &::after {
-        content: "";
-        width: 20px;
-        background-color: #1d6d86;
-      }
     }
   }
 }
