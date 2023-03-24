@@ -1,3 +1,4 @@
+import { MusicService } from './../../services/music.service';
 import { EmotionFrom } from './../../utils/enum';
 import { EmotionService } from './../../services/emotion.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,7 +14,11 @@ export class CheerMeUpComponent implements OnInit {
   isSearchingSong: boolean;
   textDetectedEmotion: string;
   videoDetectedEmotion: string;
-  constructor(private emotionService: EmotionService) {}
+  songs: any[] = [];
+  constructor(
+    private emotionService: EmotionService,
+    private musicService: MusicService
+  ) {}
 
   ngOnInit(): void {
     this.emotionService.detectedEmotion.subscribe((emotion: any) => {
@@ -26,5 +31,16 @@ export class CheerMeUpComponent implements OnInit {
     });
   }
 
-  searchSong() {}
+  searchSong() {
+    const sub = this.musicService
+      .searchSong(this.songName)
+      .subscribe((songs: any) => {
+        songs.data?.results?.forEach((song) => {
+          song.link = song.downloadUrl[song?.downloadUrl?.length - 1].link;
+          song.image = song.image[song?.image?.length - 1].link;
+        });
+        this.songs = songs.data?.results;
+        sub.unsubscribe();
+      });
+  }
 }

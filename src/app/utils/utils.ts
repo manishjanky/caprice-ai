@@ -19,8 +19,48 @@ export enum SPEECH_RECOGNITION_INTENT {
   Joke,
   Meme,
   Music,
-  Art
+  Art,
 }
+
+export const VIDEO_EMOTIONS = [
+  'angry',
+  'disgusted',
+  'fearful',
+  'happy',
+  'neutral',
+  'sad',
+  'surprised',
+];
+export const TEXT_EMOTIONS = [
+  'love',
+  'admiration',
+  'joy',
+  'approval',
+  'caring',
+  'excitement',
+  'amusement',
+  'gratitude',
+  'desire',
+  'anger',
+  'optimism',
+  'disapproval',
+  'grief',
+  'annoyance',
+  'pride',
+  'curiosity',
+  'neutral',
+  'disgust',
+  'disappointment',
+  'realization',
+  'fear',
+  'relief',
+  'confusion',
+  'remorse',
+  'embarrassment',
+  'surprise',
+  'sadness',
+  'nervousness',
+];
 
 export function isSafari() {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);

@@ -16,9 +16,8 @@
                                     <div class=" row mb-2">
                                         <div class="col-12">
                                             <div class="mb-2">
-                                                <label for="songName" class="form-label">Song title</label>
                                                 <input type="text" [(ngModel)]="songName" class="form-control"
-                                                    id="songName" placeholder="Search a song">
+                                                    id="songName" placeholder="Search for a song">
                                             </div>
                                             <div class="mt-1">
                                                 <button (click)="searchSong()" class="btn btn-primary" type="button">
@@ -30,7 +29,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <app-audio-player></app-audio-player>
+                                    <app-audio-player *ngIf="songs?.length" [audioList]="songs"></app-audio-player>
                                 </div>
 
                             </div>

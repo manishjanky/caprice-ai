@@ -1,12 +1,12 @@
 <div class="audio-player">
     <div class="row">
         <div class="col-12 col-md-3 col-lg-2">
-            <div class="image" [style.background-image]="audio?.image"></div>
+            <div class="image" [style.background-image]="'url('+audio?.image+')'"></div>
         </div>
         <div class="col-12 col-md-9 col-lg-10">
             <div class="row audio-detail">
-                <div class="col-12">
-                    <h6>Audio title</h6>
+                <div class="col-12 pt-2">
+                    <h6>{{audio?.name}}</h6>
                 </div>
                 <div class="col-12">
                     <div class="row timing ">
@@ -23,20 +23,21 @@
             </div>
             <div class="row player-controls">
                 <div class="col-2 d-flex justify-content-center">
-                    <i class="bi bi-skip-backward"></i>
+                    <i (click)="previous()" class="bi bi-skip-backward"></i>
                 </div>
                 <div class="col-2 d-flex justify-content-center">
-                    <i class="bi" [ngClass]="{'bi-play': !isPlaying,'bi-pause-circel': isPlaying}"></i>
+                    <i class="bi" (click)="playPause()"
+                        [ngClass]="{'bi-play': !isPlaying,'bi-pause-circle': isPlaying}"></i>
                 </div>
                 <div class="col-2 d-flex justify-content-center">
-                    <i class="bi bi-skip-forward"></i>
+                    <i (click)="next()" class="bi bi-skip-forward"></i>
                 </div>
                 <div class="col-6">
                     <div class="volume-controls d-flex align-items-center position-relative ">
                         <i class="bi bi-volume-up"></i>
                         <input #volumeRange [(ngModel)]="volume" (change)="volumeChange()" type="range" min="0" max="10"
                             class="form-range" id="volume">
-                        <span *ngIf="volumeRange" [style.width]="activeVolume" class="active-volume"></span>
+                        <span [style.width]="activeVolume" class="active-volume"></span>
                     </div>
 
                 </div>
@@ -45,5 +46,5 @@
         </div>
     </div>
 </div>
-<audio #audioref (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()"
-    preload="metadata" [src]="audio?.uri || audio?.mediaUrl || audio?.link"></audio>
+<audio #audioref autoplay (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()"
+    preload="metadata" [src]="audio?.uri || audio?.mediaUrl || audio?.link" (ended)="onEnd()"></audio>
