@@ -11,9 +11,30 @@
                     <li [ngbNavItem]="1" class="nav-item">
                         <a ngbNavLink class="nav-link">Music</a>
                         <ng-template ngbNavContent>
-                            <p>
-                                Music
-                            </p>
+                            <div class="card rounded shadow mt-4">
+                                <div class="card-body">
+                                    <div class=" row mb-2">
+                                        <div class="col-12">
+                                            <div class="mb-2">
+                                                <label for="songName" class="form-label">Song title</label>
+                                                <input type="text" [(ngModel)]="songName" class="form-control"
+                                                    id="songName" placeholder="Search a song">
+                                            </div>
+                                            <div class="mt-1">
+                                                <button (click)="searchSong()" class="btn btn-primary" type="button">
+                                                    <span *ngIf="isSearchingSong" class="spinner-grow spinner-grow-sm"
+                                                        role="status" aria-hidden="true">
+                                                    </span>
+                                                    {{isSearchingSong? 'Loading...': 'Search'}}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <app-audio-player></app-audio-player>
+                                </div>
+
+                            </div>
+
                         </ng-template>
                     </li>
                     <li [ngbNavItem]="2" class="nav-item">

@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheerMeUpComponent implements OnInit {
   emotion: any;
+  songName: string;
+  isSearchingSong: boolean;
   constructor(private emotionService: EmotionService) {}
 
   ngOnInit(): void {
@@ -15,4 +17,6 @@ export class CheerMeUpComponent implements OnInit {
       this.emotion = emotion?.emotion;
     });
   }
+
+  searchSong() {}
 }

@@ -8,3 +8,13 @@ canvas {
 canvas {
   position: absolute;
 }
+
+.not-recording {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  font-size: 64px;
+  top: 0;
+  left: 0;
+  color: var(--color-primary-text);
+}
