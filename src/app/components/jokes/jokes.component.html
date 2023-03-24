@@ -1,4 +1,9 @@
-<ng-container *ngIf="jokes?.length">
+<ng-container>
     <app-joke [joke]="joke" *ngFor="let joke of jokes"></app-joke>
-    <button class="btn btn-primary mt-3" (click)="getJoke()">One more</button>
+    <div *ngIf="!jokes?.length || isLoading" class="d-flex justify-content-center mt-3">
+        <div class="spinner-grow text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <button *ngIf="jokes?.length" class="btn btn-primary mt-3" (click)="getJoke()">One more</button>
 </ng-container>

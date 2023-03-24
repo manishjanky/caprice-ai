@@ -1,3 +1,4 @@
+import { JOKE_CATEGORY } from './../utils/joke-meme.utils';
 import { HUGGING_FACE, JOKE_API, MEME_API } from './../utils/api.utils';
 import { environment } from './../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -13,7 +14,8 @@ export class JokeService {
   huggingFaceUrl = environment.huggingFace;
   constructor(private http: HttpClient) {}
 
-  getJoke(category: string = 'Any'): Observable<any> {
+  getJoke(category?: string): Observable<any> {
+    category = Object.values(JOKE_CATEGORY).join(',');
     return this.http.get(`${this.jokeApiUrl}${JOKE_API.getJoke}/${category}`);
   }
 

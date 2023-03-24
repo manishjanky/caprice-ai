@@ -4,10 +4,8 @@ export enum JOKE_TYPE {
 }
 
 export enum JOKE_CATEGORY {
-  Programming,
-  Misc,
-  Dark,
-  Pun,
-  Spooky,
-  Christmas,
+  Programming = 'Programming',
+  Misc = 'Misc',
+  Pun = 'Pun',
+  Spooky = 'Spooky',
 }

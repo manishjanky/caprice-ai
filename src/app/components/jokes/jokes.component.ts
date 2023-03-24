@@ -10,6 +10,7 @@ import { SPEECH_RECOGNITION_INTENT } from 'src/app/utils/utils';
 })
 export class JokesComponent implements OnInit {
   jokes: any[] = [];
+  isLoading: boolean;
   constructor(
     private jokeService: JokeService,
     private speechService: SpeechService
@@ -21,7 +22,9 @@ export class JokesComponent implements OnInit {
   }
 
   getJoke() {
+    this.isLoading = true;
     const sub = this.jokeService.getJoke().subscribe((joke) => {
+      this.isLoading = false;
       this.jokes.push(joke);
       sub.unsubscribe();
     });

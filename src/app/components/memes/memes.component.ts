@@ -10,6 +10,7 @@ import { SPEECH_RECOGNITION_INTENT } from 'src/app/utils/utils';
 })
 export class MemesComponent implements OnInit {
   memes: any[] = [];
+  isLoading: boolean;
   constructor(
     private jokeService: JokeService,
     private speechService: SpeechService
@@ -21,7 +22,9 @@ export class MemesComponent implements OnInit {
   }
 
   getMeme() {
+    this.isLoading = true;
     const sub = this.jokeService.getMeme().subscribe((meme) => {
+      this.isLoading = false;
       this.memes.push(meme);
       sub.unsubscribe();
     });
