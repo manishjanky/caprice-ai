@@ -10,6 +10,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class JokeComponent implements OnInit {
   @Input() joke: any;
   type = JOKE_TYPE;
+  categoryText = 'Hers is a $cat joke';
   constructor(private speechService: SpeechService) {}
 
   ngOnInit(): void {
@@ -17,17 +18,14 @@ export class JokeComponent implements OnInit {
   }
 
   speakJoke() {
-    if (!this.isSpeechAvailable) {
-      return;
-    }
     if (this.joke.type === this.type.Single) {
       this.speechService.speak(
-        SPEAK_JOKE.JokeCategoryText.replace('$replace', this.joke.category)
+        this.categoryText.replace('$cat', this.joke.category)
       );
       this.speechService.speak(this.joke.joke);
     } else {
       this.speechService.speak(
-        SPEAK_JOKE.JokeCategoryText.replace('$replace', this.joke.category)
+        this.categoryText.replace('$cat', this.joke.category)
       );
       this.speechService.speak(this.joke.setup);
       setTimeout(() => {
