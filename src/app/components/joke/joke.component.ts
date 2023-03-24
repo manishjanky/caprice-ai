@@ -13,6 +13,26 @@ export class JokeComponent implements OnInit {
   constructor(private speechService: SpeechService) {}
 
   ngOnInit(): void {
-    this.speechService.speak('');
+    this.speakJoke();
+  }
+
+  speakJoke() {
+    if (!this.isSpeechAvailable) {
+      return;
+    }
+    if (this.joke.type === this.type.Single) {
+      this.speechService.speak(
+        SPEAK_JOKE.JokeCategoryText.replace('$replace', this.joke.category)
+      );
+      this.speechService.speak(this.joke.joke);
+    } else {
+      this.speechService.speak(
+        SPEAK_JOKE.JokeCategoryText.replace('$replace', this.joke.category)
+      );
+      this.speechService.speak(this.joke.setup);
+      setTimeout(() => {
+        this.speechService.speak(this.joke.delivery);
+      }, 1000);
+    }
   }
 }
