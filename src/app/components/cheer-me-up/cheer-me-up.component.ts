@@ -1,9 +1,16 @@
+import {
+  CapricePrompts,
+  HappyMusicEmotions,
+  CalmingMusicEmotions,
+  LoveMusicEmotions,
+} from './../../utils/utils';
 import { SpeechService } from './../../services/speech.service';
 import { MusicService } from './../../services/music.service';
 import { EmotionFrom } from './../../utils/enum';
 import { EmotionService } from './../../services/emotion.service';
 import { Component, OnInit } from '@angular/core';
 import { SPEECH_RECOGNITION_INTENT } from 'src/app/utils/utils';
+import { last } from 'rxjs';
 
 @Component({
   selector: 'app-cheer-me-up',
@@ -19,6 +26,7 @@ export class CheerMeUpComponent implements OnInit {
   songs: any[] = [];
   micRecording: boolean;
   activeTab: number;
+  songSuggestions: any[] = [];
   constructor(
     private emotionService: EmotionService,
     private musicService: MusicService,
@@ -26,12 +34,20 @@ export class CheerMeUpComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.textDetectedEmotion = this.emotionService.textEmotion;
+    this.speechService.speak(CapricePrompts.chooseOption);
     this.emotionService.detectedEmotion.subscribe((emotion: any) => {
       if (emotion?.from === EmotionFrom.text) {
-        this.textDetectedEmotion = emotion;
+        this.textDetectedEmotion = emotion.emotion;
       }
-      if (emotion?.from === EmotionFrom.video) {
-        this.videoDetectedEmotion = emotion;
+      if (!this.videoDetectedEmotion && emotion?.from === EmotionFrom.video) {
+        this.videoDetectedEmotion = emotion.emotion;
+      }
+      if (
+        (this.textDetectedEmotion || !this.emotionService.answer) &&
+        this.videoDetectedEmotion
+      ) {
+        this.suggestMusic();
       }
     });
 
@@ -44,22 +60,19 @@ export class CheerMeUpComponent implements OnInit {
         this.searchSong();
       }
     });
+    this.musicService.musicSuggestions.subscribe((suggestions) => {
+      this.songSuggestions = suggestions;
+      this.songs = this.songSuggestions;
+    });
   }
 
   searchSong() {
     this.isSearchingSong = true;
-    const songsList = [];
     const sub = this.musicService
       .searchSong(this.songName)
       .subscribe((songs: any) => {
-        songs.data?.results?.forEach((song) => {
-          song.image = song?.image[song?.image?.length - 1].link;
-          if (song.downloadUrl) {
-            song.link = song?.downloadUrl[song?.downloadUrl?.length - 1].link;
-            songsList.push(song);
-          }
-        });
-        this.songs = songsList;
+        this.songs = this.musicService.setSongProperties(songs?.data?.results);
+        this.songSuggestions = this.songs;
         this.isSearchingSong = false;
         sub.unsubscribe();
       });
@@ -68,7 +81,6 @@ export class CheerMeUpComponent implements OnInit {
   micMouseDown() {
     this.micRecording = true;
     this.speechService.recognitionIntent = SPEECH_RECOGNITION_INTENT.Music;
-
     this.speechService.startSpeechRecognition();
   }
   micMouseUp() {
@@ -79,4 +91,36 @@ export class CheerMeUpComponent implements OnInit {
   tabChange(index) {
     this.activeTab = index;
   }
+
+  suggestMusic() {
+    if (
+      HappyMusicEmotions.indexOf(this.textDetectedEmotion) > -1 ||
+      HappyMusicEmotions.indexOf(this.videoDetectedEmotion) > -1
+    ) {
+      this.searchPlaylists('happy music');
+      return;
+    }
+
+    if (
+      CalmingMusicEmotions.indexOf(this.textDetectedEmotion) > -1 ||
+      CalmingMusicEmotions.indexOf(this.videoDetectedEmotion) > -1
+    ) {
+      this.searchPlaylists('soothing music');
+      return;
+    }
+
+    if (
+      LoveMusicEmotions.indexOf(this.textDetectedEmotion) > -1 ||
+      LoveMusicEmotions.indexOf(this.videoDetectedEmotion) > -1
+    ) {
+      this.searchPlaylists('romantic music');
+      return;
+    }
+  }
+
+  searchPlaylists(mood: string) {
+    this.musicService.searchPlaylist(mood);
+  }
+
+  playSong(song: any) {}
 }

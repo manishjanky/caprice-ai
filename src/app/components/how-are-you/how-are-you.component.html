@@ -1,0 +1,30 @@
+<div class="how-are-you p-4">
+    <div class="modal-body">
+        <form (submit)="onSubmit()">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Please tell me, how are you feeling today?</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between ">
+                        <input name="answer" id="answer" [(ngModel)]="answer" placeholder="How are you feeling" class="form-control" type="text">
+                        <button (mouseup)="micMouseUp()" (mousedown)="micMouseDown()" class="btn btn-primary mic"
+                            type="button">
+                            <i *ngIf="!micRecording" class="bi bi-mic"></i>
+                            <i *ngIf="micRecording" class="bi bi-mic-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Make me smile <i class="bi bi-emoji-smile"></i></button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>

@@ -1,5 +1,5 @@
 <div class="row gesture-controls">
-    <h6 class="text-start">Control your music</h6>
+    <h6 class="text-start">Control your music with hand signals</h6>
     <div class="col-6 col-md-3">
         <i class="bi bi-hand-index"></i>
         <p>Point up: Volume up</p>
@@ -22,12 +22,15 @@
 <div *ngIf="!educating" class="audio-player">
     <div class="row">
         <div class="col-12 col-md-3 col-lg-2">
-            <div class="image" [style.background-image]="'url('+audio?.image+')'"></div>
+            <div class="image" [style.background-image]="'url('+audio.image+')'"></div>
         </div>
         <div class="col-12 col-md-9 col-lg-10">
             <div class="row audio-detail">
-                <div class="col-12 pt-2">
+                <div class="col-9 pt-2">
                     <h6>{{audio?.name}}</h6>
+                </div>
+                <div class="col-3 text-end">
+                    <p (click)="addToPlaylist()" class="badge bg-primary cursor-pointer"><span class="bi bi-bookmark-plus mr-2"></span>Playlist</p> 
                 </div>
                 <div class="col-12">
                     <div class="row timing ">
@@ -58,7 +61,7 @@
                         <i class="bi bi-volume-up"></i>
                         <input #volumeRange [(ngModel)]="volume" (change)="volumeChange()" type="range" min="0" max="10"
                             class="form-range" id="volume">
-                        <span [style.width]="activeVolume" class="active-volume"></span>
+                        <span [style.width]="activeVolumeWidth" class="active-volume"></span>
                     </div>
 
                 </div>

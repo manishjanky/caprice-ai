@@ -34,8 +34,9 @@ Based on the the deduction of the video and the answer the system finds some rel
 
 In the music section the user can search of their preffered music using text/voice search.
 The user can control the playing music using hand signals which leverage another pre-trained AI model to detect hand signals.
+Create and access palylist's.
 
-## Art
+## AI Draw
 
 The the art section the user can describe what kind of an image they would like to visualize and the system using a pre-trained AI model generates and presents the same to the user. In this section too the user can leverage text/voice search.
 
@@ -51,9 +52,10 @@ In the memes section the system pulls random memes from reddit and present the s
 
 - The facial recognititon model can be fine tuned and the accuracy can be improved. As the performamce in detecting the negative emotions is not that good.
 - Facial rxpression recognition using images can be done.
-- Speech recognition can be improved and implemented to make the system completely handsfree. So that visually impaired people can also interact with the system
+- Speech recognition can be improved and implemented to make the system completely handsfree.
 - Hand signal detection model can be trained to recognize more singnals can actually help in some real world problems too.
 - Image description and text from image AI models can be used to describe the memes.
+- The system runs serverless as of now. But by building a robust the capabilities of the application can be improved a lot.
 
 ### AI Capabilities used
 

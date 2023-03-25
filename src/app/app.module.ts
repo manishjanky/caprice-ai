@@ -12,9 +12,10 @@ import { VideoComponent } from './components/video/video.component';
 import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { HeaderComponent } from './components/header/header.component';
 import { CheerMeUpComponent } from './components/cheer-me-up/cheer-me-up.component';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateArtComponent } from './components/create-art/create-art.component';
 import { FormsModule } from '@angular/forms';
+import { HowAreYouComponent } from './components/how-are-you/how-are-you.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     CheerMeUpComponent,
     CreateArtComponent,
+    HowAreYouComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +38,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     FormsModule,
     NgbNavModule,
+    NgbPopoverModule
   ],
   providers: [],
   bootstrap: [AppComponent],

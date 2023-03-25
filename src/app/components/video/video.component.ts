@@ -32,6 +32,7 @@ import { isSafari } from 'src/app/utils/utils';
 import { draw, resizeResults } from '@vladmandic/face-api';
 import { GestureRecognizer, FilesetResolver } from '@mediapipe/tasks-vision';
 import { HAND_CONNECTIONS } from '@mediapipe/hands';
+import { EmotionFrom } from 'src/app/utils/enum';
 
 @Component({
   selector: 'app-video',
@@ -93,14 +94,19 @@ export class VideoComponent implements OnInit, OnDestroy {
         }, 2000);
       }
     });
-    this.emotionService.detectedEmotion.subscribe((expression) => {
+    this.emotionService.detectedEmotion.subscribe(async (expression) => {
       this.detectingEmotion = false;
-      if (expression && expression.emotion) {
+      if (
+        expression &&
+        expression.emotion &&
+        expression.from === EmotionFrom.video
+      ) {
         this.videoMessage = `Detected expression - ${expression.emotion.toUpperCase()}`;
         setTimeout(() => {
           this.videoMessage = '';
         }, 2000);
       } else {
+        await this.setUpFaceMesh();
         this.detectEmotion();
       }
     });
@@ -116,7 +122,6 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   async detectEmotion() {
     this.videoMessage = VIDEO_PROCESSING_MESSAGE.detectingExpression;
-    await this.setUpFaceMesh();
     setTimeout(async () => {
       await this.emotionService.detectFaceExpression(this.videoElement);
       this.checkToDrawMesh();
@@ -221,9 +226,9 @@ export class VideoComponent implements OnInit, OnDestroy {
       }
     }
     if (clear) {
-      setTimeout(() => {
+      setTimeout(async () => {
         this.clearFaceMesh();
-        this.initGestures();
+        await this.initGestures();
       }, 2000);
     }
   }
@@ -258,11 +263,11 @@ export class VideoComponent implements OnInit, OnDestroy {
     if (!this.gestureRecognizer) {
       return;
     }
-    const results = this.gestureRecognizer.recognizeForVideo(
+    const results = this.gestureRecognizer?.recognizeForVideo(
       this.videoElement,
       nowInMs
     );
-    if (!results.gestures.length) {
+    if (!results?.gestures.length) {
       return;
     } else {
       if (

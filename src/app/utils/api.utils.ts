@@ -20,6 +20,7 @@ export const SAAVAN_API = {
   searchAlbum: '/search/albums',
   searchArtist: '/search/artists',
   searchPlaylist: '/search/playlists',
+  getPlaylist:'/playlists'
 };
 
 export const ZEN_QUOTES_API = {

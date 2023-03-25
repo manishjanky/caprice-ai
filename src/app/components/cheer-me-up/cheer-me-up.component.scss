@@ -15,7 +15,29 @@
     }
   }
 
-  .form-label{
+  .form-label {
     color: var(--color-primary-text);
+  }
+  .column {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .song-suggestion {
+    height: 300px;
+    overflow-y: auto;
+    color: var(--color-primary);
+  }
+
+  .image {
+    background-image: url(/assets/images/audio_player.jpeg);
+    min-height: 48px;
+    background-size: 100% 100%;
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+  }
+  .play-song{
+    font-size: 30px;
   }
 }

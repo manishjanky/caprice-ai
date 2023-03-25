@@ -12,6 +12,7 @@ import {
   Input,
   ChangeDetectorRef,
   OnDestroy,
+  AfterViewChecked,
 } from '@angular/core';
 import { Category } from '@mediapipe/tasks-vision';
 import {
@@ -25,7 +26,9 @@ import {
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.scss'],
 })
-export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
+export class AudioPlayerComponent
+  implements OnInit, OnChanges, OnDestroy, AfterViewChecked
+{
   @ViewChild('audioref') audioRef: ElementRef;
   @ViewChild('volumeRange') volumeRange: ElementRef;
   @Input() audioList: any[] = [];
@@ -36,6 +39,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
   audio: any;
   volume: number = 8;
   educating = true;
+  activeVolumeWidth: string | number;
   constructor(
     private videoService: VideoService,
     private speechSerice: SpeechService,
@@ -52,10 +56,10 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
     return this.audioRef?.nativeElement;
   }
 
-  get activeVolume() {
+  setActiveVolume() {
     const val =
       this.volumeRange?.nativeElement.clientWidth * (this.volume / 10);
-    return !isNaN(val) ? `${val - 2}px` : 0;
+    this.activeVolumeWidth = !isNaN(val) ? `${val - 2}px` : 0;
   }
   ngOnInit(): void {
     if (this.audioList.length && !this.audio) {
@@ -82,6 +86,10 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
           break;
       }
     });
+  }
+
+  ngAfterViewChecked(): void {
+    this.setActiveVolume();
   }
 
   educate = (startIndex) => {
@@ -111,9 +119,11 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
         });
         break;
       case GESTURE_TYPES.Open_Palm:
-        this.speechSerice.speak('Pausing music', () => {
-          this.pause();
-        });
+        if (this.isPlaying) {
+          this.speechSerice.speak('Pausing music', () => {
+            this.pause();
+          });
+        }
         break;
       case GESTURE_TYPES.Thumb_Up:
         this.speechSerice.speak('Playing previous track', () => {
@@ -130,7 +140,13 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
         this.speechSerice.speak('Playing next track', () => {
           this.next();
         });
-
+        break;
+      case GESTURE_TYPES.Victory:
+        if (!this.isPlaying) {
+          this.speechSerice.speak('Playing music', () => {
+            this.play();
+          });
+        }
         break;
     }
   }
@@ -138,14 +154,19 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     this.audio = this.audioList[0];
     this.history.push(this.audio);
+    if (!this.educating) {
+      this.play();
+    }
   }
   play() {
     setTimeout(() => {
-      this.audioElement.play();
-    }, 100);
+      this.audioElement?.play();
+      this.isPlaying = true;
+    }, 10);
   }
   pause() {
-    this.audioElement.pause();
+    this.audioElement?.pause();
+    this.isPlaying = false;
   }
 
   playTimeUpdated() {
@@ -154,8 +175,8 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
     }%`;
   }
 
-  async playPause() {
-    this.isPlaying ? this.audioElement.pause() : await this.play();
+  playPause() {
+    this.isPlaying ? this.pause() : this.play();
   }
 
   volumeChange() {
@@ -163,6 +184,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
       this.volume = 10;
     }
     this.audioElement.volume = this.volume / 10;
+    this.setActiveVolume();
   }
 
   next() {
@@ -203,5 +225,9 @@ export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
     this.pause();
     this.audio = null;
     this.history = [];
+  }
+
+  addToPlaylist() {
+    this.musicService.addSongToPlaylist(this.audio);
   }
 }

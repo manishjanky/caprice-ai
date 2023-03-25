@@ -12,6 +12,7 @@ export class EmotionService {
   detectedEmotion = new EventEmitter<{ emotion: string; from: EmotionFrom }>();
   textEmotion: string;
   videoEmotion: any;
+  answer: string;
   constructor(private http: HttpClient) {
     this.loadModels();
   }
@@ -20,7 +21,6 @@ export class EmotionService {
     await faceapi.loadSsdMobilenetv1Model(this.modelsPath);
     await faceapi.loadFaceLandmarkModel(this.modelsPath);
     await faceapi.loadFaceExpressionModel(this.modelsPath);
-
   }
 
   async detectFaceExpression(input: HTMLVideoElement) {
@@ -40,6 +40,7 @@ export class EmotionService {
   }
 
   detectTextExpression(text: string) {
+    this.answer = text;
     const url = `${environment.huggingFace}${HUGGING_FACE.getEmotionInference}`;
     let headers = new HttpHeaders();
     headers = headers.append(
@@ -49,10 +50,14 @@ export class EmotionService {
     const sub = this.http.post(url, { inputs: text }, { headers });
     sub.subscribe((data) => {
       // extract text emotion based on highest priority
-      this.textEmotion = this.getMax(data[0]);
+      const emotions = {};
+      data[0].forEach((elem) => {
+        emotions[elem.label] = elem.score;
+      });
+      this.textEmotion = this.getMax(emotions);
       this.detectedEmotion.emit({
         emotion: this.textEmotion,
-        from: EmotionFrom.video,
+        from: EmotionFrom.text,
       });
     });
     return sub;
