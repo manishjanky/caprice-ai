@@ -9,5 +9,5 @@ export const FaceMeshConfig = {
 
 export const VIDEO_PROCESSING_MESSAGE = {
   detectingGesture: 'Processing gesture...',
-  detectingExpression: 'Detecting expression...',
+  detectingExpression: 'Detecting facial expression...',
 };

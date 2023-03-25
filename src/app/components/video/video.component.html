@@ -1,9 +1,11 @@
 <ng-container>
     <div class="position-relative rounded">
 
-        <video (progress)="onProgress()" #video autoplay class="shadow rounded"></video>
+        <video #video autoplay class="shadow rounded"></video>
         <canvas *ngIf="isCameraActive" #canvas id="canvas" [width]="videoElement?.clientWidth"
             [height]="videoElement?.clientHeight"></canvas>
+        <!-- <canvas *ngIf="isCameraActive" #gestureCanvas id="gestureCanvas" [width]="videoElement?.clientWidth"
+            [height]="videoElement?.clientHeight"></canvas> -->
         <div *ngIf="!isCameraActive" class="not-recording d-flex align-items-center justify-content-center">
             <i class="bi bi-camera-video-off"></i>
         </div>

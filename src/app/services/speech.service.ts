@@ -49,10 +49,13 @@ export class SpeechService {
       );
   }
 
-  speak(text: string) {
+  speak(text: string, onend?: any) {
     if (this.isSpeechSupported) {
       let speech = new SpeechSynthesisUtterance(text);
       speechSynthesis.speak(speech);
+      if (onend) {
+        speech.onend = onend;
+      }
     } else {
       console.log('Speech not supported');
     }

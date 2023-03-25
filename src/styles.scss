@@ -8,6 +8,15 @@
   --color-primary-text: #effaf6;
 }
 
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.btn-primary {
+  @extend .bg-primary;
+  border-color: var(--color-primary-text);
+}
+
 body {
   color: var(--color-primary-text);
 }
@@ -42,4 +51,8 @@ input[type="range"] {
       background-color: rgba(#1d6d86, 0.4);
     }
   }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

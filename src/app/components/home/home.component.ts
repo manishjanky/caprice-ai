@@ -20,12 +20,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.speechService.speak(
-      `${CapricePrompts.greetings} ${
-        !this.speechService.usersName ? CapricePrompts.askName : ''
-      }`
+      `${CapricePrompts.greetings}`
     );
-    this.speechService.speechToTextInit();
-    this.speechService.startSpeechRecognition();
   }
 
   speechResults(results: SpeechRecognitionEvent) {

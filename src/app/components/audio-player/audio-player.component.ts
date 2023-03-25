@@ -1,3 +1,5 @@
+import { MusicService } from './../../services/music.service';
+import { SpeechService } from './../../services/speech.service';
 import { GESTURE_TYPES } from './../../utils/utils';
 import { VideoService } from './../../services/video.service';
 import {
@@ -9,24 +11,36 @@ import {
   SimpleChanges,
   Input,
   ChangeDetectorRef,
+  OnDestroy,
 } from '@angular/core';
 import { Category } from '@mediapipe/tasks-vision';
+import {
+  educateMessage,
+  MUSIC_CONTROL_ACTIONS,
+  MUSIC_PLAYING,
+} from 'src/app/utils/music.utils';
 
 @Component({
   selector: 'app-audio-player',
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.scss'],
 })
-export class AudioPlayerComponent implements OnInit, OnChanges {
+export class AudioPlayerComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('audioref') audioRef: ElementRef;
   @ViewChild('volumeRange') volumeRange: ElementRef;
   @Input() audioList: any[] = [];
+  @Input() isActive: boolean;
   playedTime: string;
   isPlaying: boolean;
   history: any[] = [];
   audio: any;
   volume: number = 8;
-  constructor(private videoService: VideoService) {}
+  educating = true;
+  constructor(
+    private videoService: VideoService,
+    private speechSerice: SpeechService,
+    private musicService: MusicService
+  ) {}
   get duration(): string {
     const duration = this.audioElement?.duration / 60;
     return !isNaN(duration) ? duration.toFixed(2).replace('.', ':') : '0:00';
@@ -49,11 +63,41 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
       this.history.push(this.audio);
     }
     this.videoService.detectedGesture.subscribe((gesture: Category) => {
-      this.handleGesture(gesture);
+      if (this.isActive) {
+        this.handleGesture(gesture);
+      }
+    });
+    this.speechSerice.speak(educateMessage, () => {
+      this.educate(0);
+    });
+
+    this.musicService.musicPlaying.subscribe((action) => {
+      switch (action) {
+        case MUSIC_PLAYING.Pause:
+        case MUSIC_PLAYING.Stop:
+          this.pause();
+          break;
+        case MUSIC_PLAYING.Start:
+          this.play();
+          break;
+      }
     });
   }
 
-  educate(){}
+  educate = (startIndex) => {
+    if (!startIndex) {
+      startIndex = 0;
+    }
+    if (startIndex < MUSIC_CONTROL_ACTIONS.length) {
+      this.speechSerice.speak(MUSIC_CONTROL_ACTIONS[startIndex], () => {
+        const index = startIndex + 1;
+        this.educate(index);
+      });
+    } else {
+      this.educating = false;
+      this.play();
+    }
+  };
   handleGesture(gesture: Category) {
     const action = gesture?.categoryName;
     switch (action) {
@@ -61,17 +105,32 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
       default:
         break;
       case GESTURE_TYPES.Thumb_Down:
-        this.next();
+        this.speechSerice.speak('Decreasing volume', () => {
+          this.volume--;
+          this.volumeChange();
+        });
         break;
       case GESTURE_TYPES.Open_Palm:
-        this.pause();
+        this.speechSerice.speak('Pausing music', () => {
+          this.pause();
+        });
         break;
       case GESTURE_TYPES.Thumb_Up:
-        this.previous();
+        this.speechSerice.speak('Playing previous track', () => {
+          this.previous();
+        });
         break;
       case GESTURE_TYPES.Pointing_Up:
-        this.volume++;
-        this.volumeChange();
+        this.speechSerice.speak('Increasing volume', () => {
+          this.volume++;
+          this.volumeChange();
+        });
+        break;
+      case GESTURE_TYPES.Closed_Fist:
+        this.speechSerice.speak('Playing next track', () => {
+          this.next();
+        });
+
         break;
     }
   }
@@ -81,7 +140,9 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
     this.history.push(this.audio);
   }
   play() {
-    this.audioElement.play();
+    setTimeout(() => {
+      this.audioElement.play();
+    }, 100);
   }
   pause() {
     this.audioElement.pause();
@@ -98,6 +159,9 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   }
 
   volumeChange() {
+    if (this.volume > 10) {
+      this.volume = 10;
+    }
     this.audioElement.volume = this.volume / 10;
   }
 
@@ -122,6 +186,9 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
     if (currentIndex > -1 && currentIndex <= this.history.length - 1) {
       this.audio = this.history[currentIndex - 1];
     }
+    if (!currentIndex || currentIndex === -1) {
+      this.audio = this.history[0];
+    }
     this.play();
   }
 
@@ -129,5 +196,12 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
     const index = this.audioList.indexOf(this.audio);
     this.audio = this.audioList[index + 1];
     this.history.push(this.audio);
+    this.play();
+  }
+
+  ngOnDestroy() {
+    this.pause();
+    this.audio = null;
+    this.history = [];
   }
 }

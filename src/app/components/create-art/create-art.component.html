@@ -2,10 +2,15 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <div class="mb-3">
-                    <label for="artDescription" class="form-label">Art Description</label>
+                <div class="mb-3 d-flex justify-content-between">
+                    <!-- <label for="artDescription" class="form-label">Art Description</label> -->
                     <input type="text" [(ngModel)]="description" class="form-control" id="artDescription"
                         placeholder="Describe what you want me to visualize">
+                    <button (mouseup)="micMouseUp()" (mousedown)="micMouseDown()" class="btn btn-primary mic"
+                        type="button">
+                        <i *ngIf="!micRecording" class="bi bi-mic"></i>
+                        <i *ngIf="micRecording" class="bi bi-mic-fill"></i>
+                    </button>
                 </div>
                 <div class="mt-2">
                     <button (click)="generateImage()" class="btn btn-primary" type="button">

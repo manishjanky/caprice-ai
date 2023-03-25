@@ -1,16 +1,16 @@
 <div class="row gesture-controls">
-    <h6 class="text-left">Control you music</h6>
+    <h6 class="text-start">Control your music</h6>
     <div class="col-6 col-md-3">
         <i class="bi bi-hand-index"></i>
         <p>Point up: Volume up</p>
     </div>
     <div class="col-6 col-md-3">
-        <i class="bi bi-hand-thumbs-up"></i>
-        <p>Thumbs down: Previous</p>
+        <i class="bi bi-hand-thumbs-down"></i>
+        <p>Thumbs down: Volume down</p>
     </div>
     <div class="col-6 col-md-3">
-        <i class="bi bi-hand-thumbs-down"></i>
-        <p>Thumbs up: Next</p>
+        <i class="bi bi-hand-thumbs-up"></i>
+        <p>Thumbs up: previous track</p>
     </div>
     <div class="col-6 col-md-3">
         <i class="bi bi-hand-index-thumb"></i>
@@ -19,7 +19,7 @@
 
 
 </div>
-<div class="audio-player">
+<div *ngIf="!educating" class="audio-player">
     <div class="row">
         <div class="col-12 col-md-3 col-lg-2">
             <div class="image" [style.background-image]="'url('+audio?.image+')'"></div>

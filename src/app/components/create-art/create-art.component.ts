@@ -14,6 +14,7 @@ export class CreateArtComponent implements OnInit {
   description: string;
   src: any;
   isLoading: boolean;
+  micRecording: boolean;
   constructor(
     private speechService: SpeechService,
     private jokeService: JokeService,
@@ -30,8 +31,27 @@ export class CreateArtComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.speechService.speechResults.subscribe((results) => {
+      if (
+        this.speechService.recognitionIntent === SPEECH_RECOGNITION_INTENT.Art
+      ) {
+        const text = results.results[0][0]?.transcript;
+        this.description = text;
+        this.generateImage();
+      }
+    });
+  }
+  micMouseDown() {
+    this.micRecording = true;
+    this.speechService.recognitionIntent = SPEECH_RECOGNITION_INTENT.Art;
+    this.speechService.startSpeechRecognition();
+  }
 
+  micMouseUp() {
+    this.micRecording = false;
+    this.speechService.stopSpeechRecognition();
+  }
   generateImage() {
     this.src = null;
     this.isLoading = true;

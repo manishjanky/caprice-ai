@@ -1,5 +1,5 @@
 export const CapricePrompts = {
-  greetings: "Hi, I'm Caprice. Your fun buddy.",
+  greetings: "Hi, I'm Caprice. The Fun AI. I like spreading smiles.",
   askName: 'May i please know yor name.',
   howAreYou: 'How are you doing today?',
 };
@@ -64,7 +64,7 @@ export const TEXT_EMOTIONS = [
 
 export enum GESTURE_TYPES {
   None = 'None',
-  Closed_Fist = 'Closed_Fit',
+  Closed_Fist = 'Closed_Fist',
   Open_Palm = 'Open_Palm',
   Pointing_Up = 'Pointing_Up',
   Thumb_Down = 'Thumb_Down',
