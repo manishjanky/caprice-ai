@@ -18,3 +18,11 @@ canvas {
   left: 0;
   color: var(--color-primary-text);
 }
+.vide-processing-message {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  width: 100%;
+  font-weight: 700;
+  background-color: rgba(#1d6d86, 0.4);
+}

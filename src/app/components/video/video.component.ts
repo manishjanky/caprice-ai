@@ -1,3 +1,5 @@
+import { GESTURE_TYPES } from './../../utils/utils';
+import { VIDEO_PROCESSING_MESSAGE } from './../../utils/mediapipe.utils';
 import { EmotionService } from './../../services/emotion.service';
 import { VideoService } from './../../services/video.service';
 import {
@@ -45,6 +47,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   isMeshVisible = false;
   gestureRecognizer: GestureRecognizer;
   gestureInterval: any;
+  videoMessage: string;
   constructor(
     private videoService: VideoService,
     private emotionService: EmotionService,
@@ -72,6 +75,26 @@ export class VideoComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.videoService.askCameraPermission();
+    this.videoService.detectedGesture.subscribe((gesture) => {
+      if (gesture.categoryName && gesture.categoryName !== GESTURE_TYPES.None) {
+        this.videoMessage = `Detected gesture - ${gesture.categoryName
+          .replace('_', ' ')
+          .toUpperCase()}`;
+        setTimeout(() => {
+          this.videoMessage = '';
+        }, 2000);
+      }
+    });
+    this.emotionService.detectedEmotion.subscribe((expression) => {
+      if (expression && expression.emotion) {
+        this.videoMessage = `Detected expression - ${expression.emotion.toUpperCase()}`;
+        setTimeout(() => {
+          this.videoMessage = '';
+        }, 2000);
+      }else{
+        this.detectEmotion();
+      }
+    });
   }
 
   setElementRefs() {
@@ -82,12 +105,13 @@ export class VideoComponent implements OnInit, OnDestroy {
     }
   }
 
-  detectEmotion() {
-    this.setUpFaceMesh();
+  async detectEmotion() {
+    this.videoMessage = VIDEO_PROCESSING_MESSAGE.detectingExpression;
+    await this.setUpFaceMesh();
     setTimeout(async () => {
       await this.emotionService.detectFaceExpression(this.videoElement);
       this.drawMesh();
-    }, 1000);
+    }, 1500);
   }
 
   async setUpFaceMesh() {
@@ -128,22 +152,19 @@ export class VideoComponent implements OnInit, OnDestroy {
       draw.drawFaceLandmarks(this.canvasElement, detectionsForSize);
       draw.drawDetections(this.canvasElement, detectionsForSize);
     }, 100);
-    setTimeout(() => {
-      this.clearFaceMesh();
-    }, 2000);
   }
-  drawMesh() {
+  drawMesh(clear = true) {
     if (isSafari()) {
       this.drawMeshNonSafari();
       this.cdref.markForCheck();
       return;
     }
-    this.isMeshVisible = false;
+    this.isMeshVisible = true;
     const ctx = this.canvasElement.getContext('2d');
     ctx.save();
     ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
     ctx.drawImage(
-      this.faceMeshResult.image,
+      this.faceMeshResult?.image,
       0,
       0,
       this.canvasElement.width,
@@ -183,6 +204,11 @@ export class VideoComponent implements OnInit, OnDestroy {
         }
       }
     }
+    if (clear) {
+      setTimeout(() => {
+        this.clearFaceMesh();
+      }, 2000);
+    }
   }
 
   async initGestures() {
@@ -200,7 +226,6 @@ export class VideoComponent implements OnInit, OnDestroy {
 
     ctx.save();
     ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
-    // window.requestAnimationFrame(this.drawGesture);
   }
 
   drawGesture() {
@@ -216,6 +241,14 @@ export class VideoComponent implements OnInit, OnDestroy {
     );
     if (!results.gestures.length) {
       return;
+    } else {
+      if (
+        this.videoService.lastDetectedGesture?.categoryName !==
+        results.gestures[0][0].categoryName
+      ) {
+        this.videoMessage = VIDEO_PROCESSING_MESSAGE.detectingGesture;
+      }
+      this.videoService.gestureDetected(results.gestures);
     }
     if (results.landmarks) {
       for (const landmarks of results.landmarks) {
@@ -236,6 +269,6 @@ export class VideoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.gestureInterval)
+    clearInterval(this.gestureInterval);
   }
 }

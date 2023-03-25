@@ -1,5 +1,5 @@
-import { MUSIC_COMMANDS, MUSIC_GRAMMAR } from './../../utils/music.utils';
-import { SpeechService } from './../../services/speech.service';
+import { GESTURE_TYPES } from './../../utils/utils';
+import { VideoService } from './../../services/video.service';
 import {
   Component,
   OnInit,
@@ -10,6 +10,7 @@ import {
   Input,
   ChangeDetectorRef,
 } from '@angular/core';
+import { Category } from '@mediapipe/tasks-vision';
 
 @Component({
   selector: 'app-audio-player',
@@ -25,7 +26,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   history: any[] = [];
   audio: any;
   volume: number = 8;
-  constructor(private speechService: SpeechService) {}
+  constructor(private videoService: VideoService) {}
   get duration(): string {
     const duration = this.audioElement?.duration / 60;
     return !isNaN(duration) ? duration.toFixed(2).replace('.', ':') : '0:00';
@@ -47,6 +48,31 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
       this.audio = this.audioList[0];
       this.history.push(this.audio);
     }
+    this.videoService.detectedGesture.subscribe((gesture: Category) => {
+      this.handleGesture(gesture);
+    });
+  }
+
+  handleGesture(gesture: Category) {
+    const action = gesture?.categoryName;
+    switch (action) {
+      case GESTURE_TYPES.None:
+      default:
+        break;
+      case GESTURE_TYPES.Thumb_Down:
+        this.next();
+        break;
+      case GESTURE_TYPES.Open_Palm:
+        this.pause();
+        break;
+      case GESTURE_TYPES.Thumb_Up:
+        this.previous();
+        break;
+      case GESTURE_TYPES.Pointing_Up:
+        this.volume++;
+        this.volumeChange();
+        break;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,6 +81,9 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   }
   play() {
     this.audioElement.play();
+  }
+  pause() {
+    this.audioElement.pause();
   }
 
   playTimeUpdated() {

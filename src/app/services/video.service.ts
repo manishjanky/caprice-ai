@@ -1,5 +1,6 @@
 import { MediaPermissionState } from '../utils/media.utils';
 import { EventEmitter, Injectable } from '@angular/core';
+import { Category } from '@mediapipe/tasks-vision';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,9 @@ export class VideoService {
   videoElement!: HTMLVideoElement;
   canvasElement!: HTMLCanvasElement;
   cameraPermission = new EventEmitter<PermissionState>();
+  detectedGesture = new EventEmitter<Category>();
+  lastDetectedGesture: Category;
+  gestureDetectedTimeStamp: any;
 
   constructor() {}
 
@@ -36,5 +40,20 @@ export class VideoService {
           this.cameraPermission.emit(MediaPermissionState.denied);
         }
       );
+  }
+
+  gestureDetected(gesture: Category[][]) {
+    // Consider on detection valid for 6 seconds
+    let gest: any = gesture[0];
+    gest = gest && gest.length > 0 ? gest[0] : null;
+    if (
+      gest &&
+      (!this.gestureDetectedTimeStamp ||
+        Date.now() - this.gestureDetectedTimeStamp > 2000)
+    ) {
+      this.gestureDetectedTimeStamp = Date.now();
+      this.lastDetectedGesture = gest;
+      this.detectedGesture.emit(gest);
+    }
   }
 }

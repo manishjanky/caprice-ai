@@ -62,6 +62,17 @@ export const TEXT_EMOTIONS = [
   'nervousness',
 ];
 
+export enum GESTURE_TYPES {
+  None = 'None',
+  Closed_Fist = 'Closed_Fit',
+  Open_Palm = 'Open_Palm',
+  Pointing_Up = 'Pointing_Up',
+  Thumb_Down = 'Thumb_Down',
+  Thumb_Up = 'Thumb_Up',
+  Victory = 'Victory',
+  ILoveYou = 'ILoveYou',
+}
+
 export function isSafari() {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }

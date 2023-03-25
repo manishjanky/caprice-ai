@@ -7,5 +7,6 @@
         <div *ngIf="!isCameraActive" class="not-recording d-flex align-items-center justify-content-center">
             <i class="bi bi-camera-video-off"></i>
         </div>
+        <div *ngIf="videoMessage" class="vide-processing-message d-flex justify-content-center">{{videoMessage}}</div>
     </div>
 </ng-container>
