@@ -74,6 +74,7 @@ export class SpeechService {
   }
 
   startSpeechRecognition() {
+    this.speechRecognition.stop();
     this.speechRecognition.start();
   }
 

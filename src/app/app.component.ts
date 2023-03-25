@@ -14,9 +14,10 @@ export class AppComponent {
   title = 'caprice-ai';
   constructor(
     private emotionService: EmotionService,
-    private http: HttpClient
+    private speechService: SpeechService
   ) {
     // load model so they are ready to use
     this.emotionService.loadModels();
+    this.speechService.speechToTextInit();
   }
 }

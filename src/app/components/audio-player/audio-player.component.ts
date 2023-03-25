@@ -1,3 +1,5 @@
+import { MUSIC_COMMANDS, MUSIC_GRAMMAR } from './../../utils/music.utils';
+import { SpeechService } from './../../services/speech.service';
 import {
   Component,
   OnInit,
@@ -23,7 +25,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   history: any[] = [];
   audio: any;
   volume: number = 8;
-  constructor(private cdref: ChangeDetectorRef) {}
+  constructor(private speechService: SpeechService) {}
   get duration(): string {
     const duration = this.audioElement?.duration / 60;
     return !isNaN(duration) ? duration.toFixed(2).replace('.', ':') : '0:00';
@@ -45,6 +47,47 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
       this.audio = this.audioList[0];
       this.history.push(this.audio);
     }
+    this.speechService.speechResults.subscribe((results) => {
+      console.log(results);
+      let command;
+      const commands = results?.results;
+      for (let i = 0; i < commands.length; i++) {
+        if (commands[0][0]?.confidence > 0.8) {
+          command = commands[0][0].transcript;
+        }
+      }
+      this.handleSpeechCommand(command);
+    });
+    this.speechService.startSpeechRecognition();
+    const speechRecognitionList = new SpeechGrammarList();
+    speechRecognitionList.addFromString(MUSIC_GRAMMAR, 1);
+  }
+
+  handleSpeechCommand(command: string) {
+    // need to figure out
+    const commandLength = command.split(' ').length;
+    const replaceWords = ['caprice', 'one', 'song', 'music'];
+    if (commandLength > 2) {
+      // this.speechService.speak('')
+      replaceWords.forEach((word) => {
+        command = command.replace(word, '');
+      });
+    }
+    command = command.trim().toLowerCase();
+    switch (command) {
+      case MUSIC_COMMANDS.play:
+        this.play();
+        break;
+      case MUSIC_COMMANDS.pause:
+        this.audioElement.pause();
+        break;
+      case MUSIC_COMMANDS.next:
+        this.next();
+        break;
+      case MUSIC_COMMANDS.previous:
+        this.previous();
+        break;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,6 +105,9 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
     this.audio = this.audioList[0];
     this.history.push(this.audio);
   }
+  play() {
+    this.audioElement.play();
+  }
 
   playTimeUpdated() {
     this.playedTime = `${
@@ -70,7 +116,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
   }
 
   async playPause() {
-    this.isPlaying ? this.audioElement.pause() : await this.audioElement.play();
+    this.isPlaying ? this.audioElement.pause() : await this.play();
   }
 
   volumeChange() {
@@ -89,7 +135,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
       }
     }
     this.history.push(this.audio);
-    this.audioElement.play();
+    this.play();
   }
 
   previous() {
@@ -98,7 +144,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
     if (currentIndex > -1 && currentIndex <= this.history.length - 1) {
       this.audio = this.history[currentIndex - 1];
     }
-    this.audioElement.play();
+    this.play();
   }
 
   onEnd() {
