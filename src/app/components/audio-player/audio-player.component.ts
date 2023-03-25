@@ -53,6 +53,7 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
     });
   }
 
+  educate(){}
   handleGesture(gesture: Category) {
     const action = gesture?.categoryName;
     switch (action) {

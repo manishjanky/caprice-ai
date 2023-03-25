@@ -45,3 +45,15 @@
     }
   }
 }
+
+.gesture-controls{
+  color: var(--color-primary);
+  text-align: center;
+
+  .bi{
+    font-size: 30px;
+  }
+  p{
+    font-size: 12px;
+  }
+}

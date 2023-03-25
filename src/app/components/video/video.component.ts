@@ -91,7 +91,7 @@ export class VideoComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.videoMessage = '';
         }, 2000);
-      }else{
+      } else {
         this.detectEmotion();
       }
     });
@@ -110,10 +110,18 @@ export class VideoComponent implements OnInit, OnDestroy {
     await this.setUpFaceMesh();
     setTimeout(async () => {
       await this.emotionService.detectFaceExpression(this.videoElement);
-      this.drawMesh();
+      this.checkToDrawMesh();
     }, 1500);
   }
 
+  checkToDrawMesh() {
+    const interval = setInterval(() => {
+      if (this.faceMeshResult) {
+        this.drawMesh();
+        clearInterval(interval)
+      }
+    }, 500);
+  }
   async setUpFaceMesh() {
     if (isSafari()) {
       return;

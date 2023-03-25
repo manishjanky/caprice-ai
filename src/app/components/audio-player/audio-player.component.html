@@ -1,3 +1,24 @@
+<div class="row gesture-controls">
+    <h6 class="text-left">Control you music</h6>
+    <div class="col-6 col-md-3">
+        <i class="bi bi-hand-index"></i>
+        <p>Point up: Volume up</p>
+    </div>
+    <div class="col-6 col-md-3">
+        <i class="bi bi-hand-thumbs-up"></i>
+        <p>Thumbs down: Previous</p>
+    </div>
+    <div class="col-6 col-md-3">
+        <i class="bi bi-hand-thumbs-down"></i>
+        <p>Thumbs up: Next</p>
+    </div>
+    <div class="col-6 col-md-3">
+        <i class="bi bi-hand-index-thumb"></i>
+        <p>Open palm : Pause</p>
+    </div>
+
+
+</div>
 <div class="audio-player">
     <div class="row">
         <div class="col-12 col-md-3 col-lg-2">
@@ -46,5 +67,5 @@
         </div>
     </div>
 </div>
-<audio #audioref autoplay (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()"
+<audio #audioref (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()"
     preload="metadata" [src]="audio?.uri || audio?.mediaUrl || audio?.link" (ended)="onEnd()"></audio>
