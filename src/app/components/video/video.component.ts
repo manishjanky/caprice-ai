@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -24,21 +25,26 @@ import {
 } from '@mediapipe/face_mesh';
 import { FaceMeshConfig } from 'src/app/utils/mediapipe.utils';
 import { Camera } from '@mediapipe/camera_utils';
-import { drawConnectors } from '@mediapipe/drawing_utils';
+import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import { isSafari } from 'src/app/utils/utils';
 import { draw, resizeResults } from '@vladmandic/face-api';
+import { GestureRecognizer, FilesetResolver } from '@mediapipe/tasks-vision';
+import { HAND_CONNECTIONS } from '@mediapipe/hands';
+
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.scss'],
 })
-export class VideoComponent implements OnInit {
+export class VideoComponent implements OnInit, OnDestroy {
   videoElement!: HTMLVideoElement;
   canvasElement!: HTMLCanvasElement;
   isCameraActive = false;
   faceMesh: FaceMesh;
   faceMeshResult: Results;
   isMeshVisible = false;
+  gestureRecognizer: GestureRecognizer;
+  gestureInterval: any;
   constructor(
     private videoService: VideoService,
     private emotionService: EmotionService,
@@ -71,6 +77,9 @@ export class VideoComponent implements OnInit {
   setElementRefs() {
     this.videoService.videoElement = this.videoElement;
     this.videoService.canvasElement = this.canvasElement;
+    if (this.videoElement && this.canvasElement && !this.gestureRecognizer) {
+      this.initGestures();
+    }
   }
 
   detectEmotion() {
@@ -174,5 +183,59 @@ export class VideoComponent implements OnInit {
         }
       }
     }
+  }
+
+  async initGestures() {
+    const ctx = this.canvasElement.getContext('2d');
+    const vision = await FilesetResolver.forVisionTasks(
+      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+    );
+    this.gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath:
+          'https://storage.googleapis.com/mediapipe-tasks/gesture_recognizer/gesture_recognizer.task',
+      },
+      runningMode: 'VIDEO',
+    });
+
+    ctx.save();
+    ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+    // window.requestAnimationFrame(this.drawGesture);
+  }
+
+  drawGesture() {
+    const ctx = this.canvasElement.getContext('2d');
+    ctx.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+    let nowInMs = Date.now();
+    if (!this.gestureRecognizer) {
+      return;
+    }
+    const results = this.gestureRecognizer.recognizeForVideo(
+      this.videoElement,
+      nowInMs
+    );
+    if (!results.gestures.length) {
+      return;
+    }
+    if (results.landmarks) {
+      for (const landmarks of results.landmarks) {
+        drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {
+          lineWidth: 1,
+          color: '#1d6d86;',
+        });
+        drawLandmarks(ctx, landmarks, { color: '#effaf6', lineWidth: 1 });
+      }
+    }
+    ctx.restore();
+  }
+
+  onProgress() {
+    this.gestureInterval = setInterval(() => {
+      this.drawGesture();
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.gestureInterval)
   }
 }

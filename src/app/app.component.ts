@@ -16,8 +16,12 @@ export class AppComponent {
     private emotionService: EmotionService,
     private speechService: SpeechService
   ) {
+    this.init();
+  }
+
+  async init() {
     // load model so they are ready to use
-    this.emotionService.loadModels();
+    await this.emotionService.loadModels();
     this.speechService.speechToTextInit();
   }
 }

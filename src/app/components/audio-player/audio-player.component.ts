@@ -47,61 +47,9 @@ export class AudioPlayerComponent implements OnInit, OnChanges {
       this.audio = this.audioList[0];
       this.history.push(this.audio);
     }
-    this.speechService.speechResults.subscribe((results) => {
-      console.log(results);
-      let command;
-      const commands = results?.results;
-      for (let i = 0; i < commands.length; i++) {
-        if (commands[0][0]?.confidence > 0.8) {
-          command = commands[0][0].transcript;
-        }
-      }
-      this.handleSpeechCommand(command);
-    });
-    this.speechService.startSpeechRecognition();
-    const speechRecognitionList = new SpeechGrammarList();
-    speechRecognitionList.addFromString(MUSIC_GRAMMAR, 1);
-  }
-
-  handleSpeechCommand(command: string) {
-    // need to figure out
-    const commandLength = command.split(' ').length;
-    const replaceWords = ['caprice', 'one', 'song', 'music'];
-    if (commandLength > 2) {
-      // this.speechService.speak('')
-      replaceWords.forEach((word) => {
-        command = command.replace(word, '');
-      });
-    }
-    command = command.trim().toLowerCase();
-    switch (command) {
-      case MUSIC_COMMANDS.play:
-        this.play();
-        break;
-      case MUSIC_COMMANDS.pause:
-        this.audioElement.pause();
-        break;
-      case MUSIC_COMMANDS.next:
-        this.next();
-        break;
-      case MUSIC_COMMANDS.previous:
-        this.previous();
-        break;
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['audioList']?.currentValue) {
-    //   if (changes['audioList'].previousValue) {
-    //     this.audioList = [
-    //       ...changes['audioList'].currentValue,
-    //       ...changes['audioList'].previousValue,
-    //     ];
-    //   } else {
-    //     this.audioList = [...changes['audioList'].currentValue];
-    //   }
-    // }
-
     this.audio = this.audioList[0];
     this.history.push(this.audio);
   }
