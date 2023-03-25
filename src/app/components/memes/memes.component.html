@@ -5,5 +5,9 @@
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
-    <button *ngIf="memes?.length" class="btn btn-primary mt-3" (click)="getMeme()">One more</button>
+    <button (click)="getMeme()" class="btn btn-primary mt-3" type="button">
+        <span *ngIf="isLoading" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true">
+        </span>
+        {{isLoading? 'Loading...': 'One more'}}
+    </button>
 </ng-container>

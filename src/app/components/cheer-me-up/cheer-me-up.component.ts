@@ -32,6 +32,7 @@ export class CheerMeUpComponent implements OnInit {
   }
 
   searchSong() {
+    this.isSearchingSong = true;
     const sub = this.musicService
       .searchSong(this.songName)
       .subscribe((songs: any) => {
@@ -40,6 +41,7 @@ export class CheerMeUpComponent implements OnInit {
           song.image = song.image[song?.image?.length - 1].link;
         });
         this.songs = songs.data?.results;
+        this.isSearchingSong = false;
         sub.unsubscribe();
       });
   }
