@@ -53,6 +53,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   detectingEmotion = true;
   showMesh = true;
   meshCamera: any;
+  subs = [];
   constructor(
     private videoService: VideoService,
     private emotionService: EmotionService,
@@ -105,19 +106,21 @@ export class VideoComponent implements OnInit, OnDestroy {
         }, 2000);
       }
     });
-    this.emotionService.detectedEmotion.subscribe(async (expression) => {
-      this.detectingEmotion = false;
-      if (
-        expression &&
-        expression.emotion &&
-        expression.from === EmotionFrom.video
-      ) {
-        this.videoMessage = `Detected expression - ${expression.emotion.toUpperCase()}`;
-        setTimeout(() => {
-          this.videoMessage = '';
-        }, 2000);
-      }
-    });
+    this.subs.push(
+      this.emotionService.detectedEmotion.subscribe(async (expression) => {
+        this.detectingEmotion = false;
+        if (
+          expression &&
+          expression.emotion &&
+          expression.from === EmotionFrom.video
+        ) {
+          this.videoMessage = `Detected expression - ${expression.emotion.toUpperCase()}`;
+          setTimeout(() => {
+            this.videoMessage = '';
+          }, 2000);
+        }
+      })
+    );
   }
 
   async setElementRefs() {
@@ -306,5 +309,8 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.gestureInterval);
+    this.subs.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 }

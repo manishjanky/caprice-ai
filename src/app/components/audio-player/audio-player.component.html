@@ -37,7 +37,7 @@
     </div>
 </ng-template>
 <button (click)="showHandSingnals()" type="button" class="btn btn-primary mb-1" data-bs-toggle="modal"
-    data-bs-target="#handSingnaControls">
+    data-bs-target="#handSignals">
     Music control hand singnals
 </button>
 <div class="playlists">
@@ -97,5 +97,7 @@
         </div>
     </div>
 </div>
-<audio #audioref (play)="isPlaying  = true" (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()"
-    preload="metadata" [src]="audio?.uri || audio?.mediaUrl || audio?.link" (ended)="onEnd()"></audio>
+<audio *ngIf="isActive && (audio?.uri || audio?.mediaUrl || audio?.link)" #audioref (play)="isPlaying  = true"
+    (pause)="isPlaying = false" (timeupdate)="playTimeUpdated()" preload="auto" (ended)="onEnd()"
+    [src]="audio?.uri || audio?.mediaUrl || audio?.link">
+    </audio>

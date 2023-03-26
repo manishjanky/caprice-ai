@@ -8,7 +8,7 @@ import { SpeechService } from './../../services/speech.service';
 import { MusicService } from './../../services/music.service';
 import { EmotionFrom } from './../../utils/enum';
 import { EmotionService } from './../../services/emotion.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SPEECH_RECOGNITION_INTENT } from 'src/app/utils/utils';
 import { last } from 'rxjs';
 
@@ -17,7 +17,7 @@ import { last } from 'rxjs';
   templateUrl: './cheer-me-up.component.html',
   styleUrls: ['./cheer-me-up.component.scss'],
 })
-export class CheerMeUpComponent implements OnInit {
+export class CheerMeUpComponent implements OnInit, OnDestroy {
   deducedEmotion: any;
   songName: string;
   isSearchingSong: boolean;
@@ -28,43 +28,51 @@ export class CheerMeUpComponent implements OnInit {
   activeTab: number;
   songSuggestions: any[] = [];
   pickedSongIndex: number;
+  subs = [];
   constructor(
     private emotionService: EmotionService,
     private musicService: MusicService,
     private speechService: SpeechService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.textDetectedEmotion = this.emotionService.textEmotion;
     this.speechService.speak(CapricePrompts.chooseOption);
-    this.emotionService.detectedEmotion.subscribe((emotion: any) => {
-      if (emotion?.from === EmotionFrom.text) {
-        this.textDetectedEmotion = emotion.emotion;
-      }
-      if (!this.videoDetectedEmotion && emotion?.from === EmotionFrom.video) {
-        this.videoDetectedEmotion = emotion.emotion;
-      }
-      if (
-        (this.textDetectedEmotion || !this.emotionService.answer) &&
-        this.videoDetectedEmotion
-      ) {
-        this.suggestMusic();
-      }
-    });
+    this.subs.push(
+      this.emotionService.detectedEmotion.subscribe((emotion: any) => {
+        if (emotion?.from === EmotionFrom.text) {
+          this.textDetectedEmotion = emotion.emotion;
+        }
+        if (!this.videoDetectedEmotion && emotion?.from === EmotionFrom.video) {
+          this.videoDetectedEmotion = emotion.emotion;
+        }
+        if (
+          (this.textDetectedEmotion || !this.emotionService.answer) &&
+          this.videoDetectedEmotion
+        ) {
+          this.suggestMusic();
+        }
+      })
+    );
 
-    this.speechService.speechResults.subscribe((results) => {
-      if (
-        this.speechService.recognitionIntent === SPEECH_RECOGNITION_INTENT.Music
-      ) {
-        const text = results.results[0][0]?.transcript;
-        this.songName = text;
-        this.searchSong();
-      }
-    });
-    this.musicService.musicSuggestions.subscribe((suggestions) => {
-      this.songSuggestions = suggestions;
-      this.songs = this.songSuggestions;
-    });
+    this.subs.push(
+      this.speechService.speechResults.subscribe((results) => {
+        if (
+          this.speechService.recognitionIntent ===
+          SPEECH_RECOGNITION_INTENT.Music
+        ) {
+          const text = results.results[0][0]?.transcript;
+          this.songName = text;
+          this.searchSong();
+        }
+      })
+    );
+    this.subs.push(
+      this.musicService.musicSuggestions.subscribe((suggestions) => {
+        this.songSuggestions = suggestions;
+        this.songs = this.songSuggestions;
+      })
+    );
   }
 
   searchSong() {
@@ -124,5 +132,11 @@ export class CheerMeUpComponent implements OnInit {
   }
   playSong(index: number) {
     this.pickedSongIndex = index;
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 }

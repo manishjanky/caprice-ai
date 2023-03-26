@@ -31,7 +31,8 @@ import {
   styleUrls: ['./audio-player.component.scss'],
 })
 export class AudioPlayerComponent
-  implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
+  implements OnInit, OnChanges, OnDestroy, AfterViewChecked
+{
   @ViewChild('audioref') audioRef: ElementRef;
   @ViewChild('volumeRange') volumeRange: ElementRef;
   @ViewChild('handSignals') handSignals: ElementRef;
@@ -45,12 +46,13 @@ export class AudioPlayerComponent
   volume: number = 8;
   educating = false;
   activeVolumeWidth: string | number;
+  subs = [];
   constructor(
     private videoService: VideoService,
     private speechSerice: SpeechService,
     private musicService: MusicService,
     private modalService: NgbModal
-  ) { }
+  ) {}
   get duration(): string {
     const duration = this.audioElement?.duration / 60;
     return !isNaN(duration) ? duration.toFixed(2).replace('.', ':') : '0:00';
@@ -72,28 +74,34 @@ export class AudioPlayerComponent
       this.audio = this.audioList[0];
       this.history.push(this.audio);
     }
-    this.videoService.detectedGesture.subscribe((gesture: Category) => {
-      if (this.isActive) {
-        this.handleGesture(gesture);
-      }
-    });
+    this.subs.push(
+      this.videoService.detectedGesture.subscribe((gesture: Category) => {
+        if (this.isActive) {
+          this.handleGesture(gesture);
+        }
+      })
+    );
     this.play();
 
-    this.musicService.playPlaylist.subscribe((list) => {
-      this.playPlaylist(list);
-    });
+    this.subs.push(
+      this.musicService.playPlaylist.subscribe((list) => {
+        this.playPlaylist(list);
+      })
+    );
 
-    this.musicService.musicPlaying.subscribe((action) => {
-      switch (action) {
-        case MUSIC_PLAYING.Pause:
-        case MUSIC_PLAYING.Stop:
-          this.pause();
-          break;
-        case MUSIC_PLAYING.Start:
-          this.play();
-          break;
-      }
-    });
+    this.subs.push(
+      this.musicService.musicPlaying.subscribe((action) => {
+        switch (action) {
+          case MUSIC_PLAYING.Pause:
+          case MUSIC_PLAYING.Stop:
+            this.pause();
+            break;
+          case MUSIC_PLAYING.Start:
+            this.play();
+            break;
+        }
+      })
+    );
   }
 
   ngAfterViewChecked(): void {
@@ -114,6 +122,9 @@ export class AudioPlayerComponent
     });
   };
   handleGesture(gesture: Category) {
+    if (!this.isActive) {
+      return;
+    }
     const action = gesture?.categoryName;
     switch (action) {
       case GESTURE_TYPES.None:
@@ -161,10 +172,19 @@ export class AudioPlayerComponent
   ngOnChanges(changes: SimpleChanges): void {
     this.audio = this.audioList[0];
     this.history.push(this.audio);
+    if (!this.isActive) {
+      this.pause();
+    }
     if (!this.educating) {
       this.play();
     }
-    if (changes && changes['playingIndex'] && changes['playingIndex'].currentValue >= 0 && changes['playingIndex'].currentValue !== changes['playingIndex'].previousValue) {
+    if (
+      changes &&
+      changes['playingIndex'] &&
+      changes['playingIndex'].currentValue >= 0 &&
+      changes['playingIndex'].currentValue !==
+        changes['playingIndex'].previousValue
+    ) {
       this.pickASong(changes['playingIndex'].currentValue);
     }
   }
@@ -180,8 +200,9 @@ export class AudioPlayerComponent
   }
 
   playTimeUpdated() {
-    this.playedTime = `${(this.audioElement?.currentTime / this.audioElement?.duration) * 100
-      }%`;
+    this.playedTime = `${
+      (this.audioElement?.currentTime / this.audioElement?.duration) * 100
+    }%`;
   }
 
   playPause() {
@@ -207,12 +228,14 @@ export class AudioPlayerComponent
     this.history.push(this.audio);
     this.play();
   }
-  next() {
-    this.audioElement.pause();
+  next = () => {
     let currentIndex = this.history.indexOf(this.audio);
+    if (!this.audio) {
+      return;
+    }
+    this.pause();
     if (currentIndex > -1 && currentIndex < this.history.length - 1) {
       this.audio = this.audioList[currentIndex + 1];
-
     } else {
       currentIndex = this.audioList.indexOf(this.audio);
       if (currentIndex > -1 && currentIndex < this.audioList.length - 1) {
@@ -221,19 +244,23 @@ export class AudioPlayerComponent
     }
     this.history.push(this.audio);
     this.play();
-  }
+  };
 
-  previous() {
-    this.audioElement.pause();
+  previous = () => {
     const currentIndex = this.history.indexOf(this.audio);
+    if (currentIndex == 0 || !this.audio) {
+      return;
+    }
+    this.pause();
     if (currentIndex > -1 && currentIndex <= this.history.length - 1) {
       this.audio = this.history[currentIndex - 1];
     }
     if (!currentIndex || currentIndex === -1) {
       this.audio = this.history[0];
     }
+
     this.play();
-  }
+  };
 
   onEnd() {
     const index = this.audioList.indexOf(this.audio);
@@ -246,6 +273,9 @@ export class AudioPlayerComponent
     this.pause();
     this.audio = null;
     this.history = [];
+    this.subs.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 
   addToPlaylist() {

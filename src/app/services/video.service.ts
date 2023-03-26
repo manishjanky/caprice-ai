@@ -43,13 +43,13 @@ export class VideoService {
   }
 
   gestureDetected(gesture: Category[][]) {
-    // Consider on detection valid for 6 seconds
+    // Consider on detection valid for 3 seconds
     let gest: any = gesture[0];
     gest = gest && gest.length > 0 ? gest[0] : null;
     if (
       gest &&
       (!this.gestureDetectedTimeStamp ||
-        Date.now() - this.gestureDetectedTimeStamp > 2000)
+        Date.now() - this.gestureDetectedTimeStamp > 3000)
     ) {
       this.gestureDetectedTimeStamp = Date.now();
       this.lastDetectedGesture = gest;
