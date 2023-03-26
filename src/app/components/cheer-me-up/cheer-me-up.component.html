@@ -49,9 +49,10 @@
                                         </div>
                                         <app-audio-player [isActive]="activeTab === 1"
                                             *ngIf="songs?.length && activeTab === 1"
+                                            [playingIndex]="pickedSongIndex"
                                             [audioList]="songs"></app-audio-player>
                                         <div class="song-suggestion card rounded mt-3">
-                                            <div *ngFor="let song of songSuggestions"
+                                            <div *ngFor="let song of songSuggestions;let index=index"
                                                 class="row p-2 m-2 shadow rounded">
                                                 <div class="col-2">
                                                     <div class="image"
@@ -62,7 +63,7 @@
                                                     <p class="m-0 p-0">{{song.by}}</p>
                                                 </div>
                                                 <div class="col-1">
-                                                    <i class="bi bi-play play-song" (click)="playSong(song)"></i>
+                                                    <i class="bi bi-play play-song" (click)="playSong(index)"></i>
                                                 </div>
                                             </div>
                                         </div>

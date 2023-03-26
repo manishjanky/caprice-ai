@@ -15,6 +15,8 @@ import {
   ChangeDetectorRef,
   OnDestroy,
   AfterViewChecked,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { Category } from '@mediapipe/tasks-vision';
 import {
@@ -29,13 +31,13 @@ import {
   styleUrls: ['./audio-player.component.scss'],
 })
 export class AudioPlayerComponent
-  implements OnInit, OnChanges, OnDestroy, AfterViewChecked
-{
+  implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @ViewChild('audioref') audioRef: ElementRef;
   @ViewChild('volumeRange') volumeRange: ElementRef;
   @ViewChild('handSignals') handSignals: ElementRef;
   @Input() audioList: any[] = [];
   @Input() isActive: boolean;
+  @Input() playingIndex: number;
   playedTime: string;
   isPlaying: boolean;
   history: any[] = [];
@@ -48,7 +50,7 @@ export class AudioPlayerComponent
     private speechSerice: SpeechService,
     private musicService: MusicService,
     private modalService: NgbModal
-  ) {}
+  ) { }
   get duration(): string {
     const duration = this.audioElement?.duration / 60;
     return !isNaN(duration) ? duration.toFixed(2).replace('.', ':') : '0:00';
@@ -161,6 +163,9 @@ export class AudioPlayerComponent
     if (!this.educating) {
       this.play();
     }
+    if (changes && changes['playingIndex'].currentValue >= 0 && changes['playingIndex'].currentValue !== changes['playingIndex'].previousValue) {
+      this.pickASong(changes['playingIndex'].currentValue);
+    }
   }
   play() {
     setTimeout(() => {
@@ -174,9 +179,8 @@ export class AudioPlayerComponent
   }
 
   playTimeUpdated() {
-    this.playedTime = `${
-      (this.audioElement?.currentTime / this.audioElement?.duration) * 100
-    }%`;
+    this.playedTime = `${(this.audioElement?.currentTime / this.audioElement?.duration) * 100
+      }%`;
   }
 
   playPause() {
@@ -190,12 +194,25 @@ export class AudioPlayerComponent
     this.audioElement.volume = this.volume / 10;
     this.setActiveVolume();
   }
-
+  pickASong(index: number) {
+    let currentIndex = index;
+    if (currentIndex > -1 && currentIndex < this.history.length - 1) {
+      this.audio = this.audioList[currentIndex];
+    } else {
+      currentIndex = this.audioList.indexOf(this.audio);
+      if (currentIndex > -1 && currentIndex < this.audioList.length - 1) {
+        this.audio = this.audioList[currentIndex];
+      }
+    }
+    this.history.push(this.audio);
+    this.play();
+  }
   next() {
     this.audioElement.pause();
     let currentIndex = this.history.indexOf(this.audio);
     if (currentIndex > -1 && currentIndex < this.history.length - 1) {
       this.audio = this.audioList[currentIndex + 1];
+
     } else {
       currentIndex = this.audioList.indexOf(this.audio);
       if (currentIndex > -1 && currentIndex < this.audioList.length - 1) {

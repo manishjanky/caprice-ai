@@ -27,11 +27,12 @@ export class CheerMeUpComponent implements OnInit {
   micRecording: boolean;
   activeTab: number;
   songSuggestions: any[] = [];
+  pickedSongIndex: number;
   constructor(
     private emotionService: EmotionService,
     private musicService: MusicService,
     private speechService: SpeechService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.textDetectedEmotion = this.emotionService.textEmotion;
@@ -121,6 +122,7 @@ export class CheerMeUpComponent implements OnInit {
   searchPlaylists(mood: string) {
     this.musicService.searchPlaylist(mood);
   }
-
-  playSong(song: any) {}
+  playSong(index: number) {
+    this.pickedSongIndex = index;
+  }
 }
