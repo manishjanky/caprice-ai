@@ -100,15 +100,15 @@ export class AudioPlayerComponent
     if (!startIndex) {
       startIndex = 0;
     }
-    if (startIndex < MUSIC_CONTROL_ACTIONS.length) {
-      this.speechSerice.speak(MUSIC_CONTROL_ACTIONS[startIndex], () => {
-        const index = startIndex + 1;
-        this.educate(index);
-      });
-    } else {
+    if (startIndex >= MUSIC_CONTROL_ACTIONS.length) {
       this.educating = false;
       this.play();
+      return;
     }
+    this.speechSerice.speak(MUSIC_CONTROL_ACTIONS[startIndex], () => {
+      const index = startIndex + 1;
+      this.educate(index);
+    });
   };
   handleGesture(gesture: Category) {
     const action = gesture?.categoryName;

@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 export class MusicService {
   saavanUrl = environment.saavanUrl;
   musicPlaying = new EventEmitter<MUSIC_PLAYING>();
+  updatePlaylist = new EventEmitter<any>();
   musicSuggestions = new BehaviorSubject(null);
   capricePlaylists: any[] = [];
   songSuggestions: any[] = [];
@@ -55,7 +56,10 @@ export class MusicService {
         );
       });
 
-      this.songSuggestions = [...this.songSuggestions, ...songs];
+      this.songSuggestions = [
+        ...this.songSuggestions,
+        ...this.setSongProperties(songs),
+      ];
       this.musicSuggestions.next(this.setSongProperties(this.songSuggestions));
     });
     return sub;
@@ -100,6 +104,7 @@ export class MusicService {
       'caprice_playlists',
       JSON.stringify(this.capricePlaylists)
     );
+    this.updatePlaylist.emit();
   }
 
   setSongProperties(songs) {

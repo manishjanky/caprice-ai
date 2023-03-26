@@ -40,11 +40,14 @@
     data-bs-target="#handSingnaControls">
     Music control hand singnals
 </button>
+<div class="row">
+    <div class="col-12">
+        <app-playlists></app-playlists>
+    </div>
+</div>
+
 <div *ngIf="!educating" class="audio-player">
     <div class="row">
-        <div class="col-12">
-            <app-playlists></app-playlists>
-        </div>
         <div class="col-12 col-md-3 col-lg-2">
             <div class="image" [style.background-image]="'url('+audio.image+')'"></div>
         </div>
@@ -83,7 +86,8 @@
                 </div>
                 <div class="col-6">
                     <div class="volume-controls d-flex align-items-center position-relative ">
-                        <i class="bi bi-volume-up"></i>
+                        <i (click)="volume = 0" class="bi"
+                            [ngClass]="{'bi-volume-up': volume > 0 ,'bi-volume-mute': volume === 0}"></i>
                         <input #volumeRange [(ngModel)]="volume" (change)="volumeChange()" type="range" min="0" max="10"
                             class="form-range" id="volume">
                         <span [style.width]="activeVolumeWidth" class="active-volume"></span>

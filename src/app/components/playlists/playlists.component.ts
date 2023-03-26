@@ -6,10 +6,20 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './playlists.component.html',
   styleUrls: ['./playlists.component.scss'],
 })
-export class PlaylistsComponent {
+export class PlaylistsComponent implements OnInit {
   myPlaylists: any[] = [];
 
   constructor(private musicService: MusicService) {
+    this.getPlaylists();
+  }
+
+  ngOnInit(): void {
+    this.musicService.updatePlaylist.subscribe(() => {
+      this.getPlaylists();
+    });
+  }
+
+  getPlaylists() {
     this.myPlaylists = this.musicService.getCapricePlaylists();
   }
 }
