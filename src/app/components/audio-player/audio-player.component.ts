@@ -1,3 +1,5 @@
+import { AddToPlaylistComponent } from './../add-to-playlist/add-to-playlist.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MusicService } from './../../services/music.service';
 import { SpeechService } from './../../services/speech.service';
 import { GESTURE_TYPES } from './../../utils/utils';
@@ -31,6 +33,7 @@ export class AudioPlayerComponent
 {
   @ViewChild('audioref') audioRef: ElementRef;
   @ViewChild('volumeRange') volumeRange: ElementRef;
+  @ViewChild('handSignals') handSignals: ElementRef;
   @Input() audioList: any[] = [];
   @Input() isActive: boolean;
   playedTime: string;
@@ -43,7 +46,8 @@ export class AudioPlayerComponent
   constructor(
     private videoService: VideoService,
     private speechSerice: SpeechService,
-    private musicService: MusicService
+    private musicService: MusicService,
+    private modalService: NgbModal
   ) {}
   get duration(): string {
     const duration = this.audioElement?.duration / 60;
@@ -228,6 +232,14 @@ export class AudioPlayerComponent
   }
 
   addToPlaylist() {
-    this.musicService.addSongToPlaylist(this.audio);
+    const modalRef = this.modalService.open(AddToPlaylistComponent);
+    modalRef.componentInstance.submit.subscribe((list) => {
+      this.musicService.addSongToPlaylist(this.audio, list.name);
+      modalRef.close();
+    });
+  }
+
+  showHandSingnals() {
+    this.modalService.open(this.handSignals);
   }
 }

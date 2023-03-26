@@ -1,36 +1,61 @@
-<div class="row gesture-controls">
-    <h6 class="text-start">Control your music with hand signals</h6>
-    <div class="col-6 col-md-3">
-        <i class="bi bi-hand-index"></i>
-        <p>Point up: Volume up</p>
+<ng-template #handSignals let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Hand singnals to control playing music</h5>
+        <button type="button" (click)="modal.close()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
     </div>
-    <div class="col-6 col-md-3">
-        <i class="bi bi-hand-thumbs-down"></i>
-        <p>Thumbs down: Volume down</p>
+    <div class="modal-body">
+        <div class="row gesture-controls">
+            <div class="col-4">
+                <img width="30px" src="/assets/images/victory.svg" />
+                <p>Victory sign : Play</p>
+            </div>
+            <div class="col-4">
+                <img width="30px" src="/assets/images/open_palm.svg" />
+                <p>Open palm : Pause</p>
+            </div>
+            <div class="col-4">
+                <img width="30px" src="/assets/images/fist.svg" />
+                <p>Fist : Next track</p>
+            </div>
+            <div class="col-4">
+                <i class="bi bi-hand-thumbs-up"></i>
+                <p>Thumbs up: previous track</p>
+            </div>
+            <div class="col-4">
+                <i class="bi bi-hand-index"></i>
+                <p>Point up: Volume up</p>
+            </div>
+            <div class="col-4">
+                <i class="bi bi-hand-thumbs-down"></i>
+                <p>Thumbs down: Volume down</p>
+            </div>
+        </div>
     </div>
-    <div class="col-6 col-md-3">
-        <i class="bi bi-hand-thumbs-up"></i>
-        <p>Thumbs up: previous track</p>
+    <div class="modal-footer">
+        <button type="button" (click)="modal.close()" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
     </div>
-    <div class="col-6 col-md-3">
-        <i class="bi bi-hand-index-thumb"></i>
-        <p>Open palm : Pause</p>
-    </div>
-
-
-</div>
+</ng-template>
+<button (click)="showHandSingnals()" type="button" class="btn btn-primary" data-bs-toggle="modal"
+    data-bs-target="#handSingnaControls">
+    Music control hand singnals
+</button>
 <div *ngIf="!educating" class="audio-player">
     <div class="row">
+        <div class="col-12">
+            <app-playlists></app-playlists>
+        </div>
         <div class="col-12 col-md-3 col-lg-2">
             <div class="image" [style.background-image]="'url('+audio.image+')'"></div>
         </div>
         <div class="col-12 col-md-9 col-lg-10">
             <div class="row audio-detail">
                 <div class="col-9 pt-2">
-                    <h6>{{audio?.name}}</h6>
+                    <h6 class="m-0 p-0">{{audio?.name}}</h6>
                 </div>
                 <div class="col-3 text-end">
-                    <p (click)="addToPlaylist()" class="badge bg-primary cursor-pointer"><span class="bi bi-bookmark-plus mr-2"></span>Playlist</p> 
+                    <p (click)="addToPlaylist()" class="badge bg-primary cursor-pointer "><span
+                            class="bi bi-bookmark-plus mr-2"></span>Playlist</p>
                 </div>
                 <div class="col-12">
                     <div class="row timing ">

@@ -46,14 +46,17 @@
   }
 }
 
-.gesture-controls{
+.gesture-controls {
   color: var(--color-primary);
   text-align: center;
 
-  .bi{
+  .bi {
     font-size: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
   }
-  p{
+  p {
     font-size: 12px;
   }
 }

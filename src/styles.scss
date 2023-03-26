@@ -3,6 +3,8 @@
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
 
+$color-primary: #1d6d86;
+
 :root {
   --color-primary: #1d6d86;
   --color-primary-text: #effaf6;
@@ -55,4 +57,17 @@ input[type="range"] {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.btn-outline-primary {
+  color: $color-primary;
+
+  &:hover {
+    color: white;
+    background-color: $color-primary;
+    border-color: $color-primary;
+  }
+}
+.modal-title {
+  color: var(--color-primary);
 }

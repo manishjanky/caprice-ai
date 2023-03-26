@@ -16,7 +16,7 @@
                         <li [ngbNavItem]="1" class="nav-item">
                             <a ngbNavLink class="nav-link">Music</a>
                             <ng-template ngbNavContent>
-                                <div *ngIf="activeTab === 1" class="card rounded shadow mt-4 mb-3">
+                                <div *ngIf="activeTab === 1" class="card rounded shadow mt-2 mb-3">
                                     <div class="card-body">
                                         <div class=" row mb-2">
                                             <div class="col-12">
@@ -51,14 +51,15 @@
                                             *ngIf="songs?.length && activeTab === 1"
                                             [audioList]="songs"></app-audio-player>
                                         <div class="song-suggestion card rounded mt-3">
-                                            <div *ngFor="let song of songSuggestions" class="row p-2 shadow rounded">
-                                                <div class="col-3 col-lg-2">
+                                            <div *ngFor="let song of songSuggestions"
+                                                class="row p-2 m-2 shadow rounded">
+                                                <div class="col-2">
                                                     <div class="image"
                                                         [style.background-image]="'url('+song?.image+')'"></div>
                                                 </div>
-                                                <div class="col-8">
-                                                    <h6>{{song.name}}</h6>
-                                                    <p>{{song.by}}</p>
+                                                <div class="col-9">
+                                                    <h6 class="m-0 p-0">{{song.name}}</h6>
+                                                    <p class="m-0 p-0">{{song.by}}</p>
                                                 </div>
                                                 <div class="col-1">
                                                     <i class="bi bi-play play-song" (click)="playSong(song)"></i>

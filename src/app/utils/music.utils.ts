@@ -13,7 +13,7 @@ export const MUSIC_CONTROL_ACTIONS = [
   'Use closed fist to go to next track.',
   'Point up with index finger to increase volume.',
   'Use thumbs down to reduce the volume',
-  'Hold the sign for at least 2 seconds after the first sign is successfully recognized.',
+  //   'Hold the sign for at least 2 seconds after the first sign is successfully recognized.',
 ];
 
 export const ExcludeMusic = ['birthday', 'christmas', 'new year'];

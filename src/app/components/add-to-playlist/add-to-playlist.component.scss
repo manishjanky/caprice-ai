@@ -1,0 +1,19 @@
+.add-to-playlist {
+  color: var(--color-primary);
+
+  .dropdown-toggle {
+    width: 100%;
+    border-color: var(--color-primary);
+
+    &:active {
+      background-color: var(--color-primary);
+    }
+  }
+
+  .available-lists {
+    div,
+    button {
+      width: 100%;
+    }
+  }
+}

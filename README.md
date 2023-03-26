@@ -56,6 +56,8 @@ In the memes section the system pulls random memes from reddit and present the s
 - Hand signal detection model can be trained to recognize more singnals can actually help in some real world problems too.
 - Image description and text from image AI models can be used to describe the memes.
 - The system runs serverless as of now. But by building a robust the capabilities of the application can be improved a lot.
+- Use a chat based model to add a feature for chit chat, where a user can just say/ask some random stuff and the system provides an appropriate response.
+- The music recommendation system can be improved to suggest more appropriate and personalized music, taking past history, preffered language into consideration.
 
 ### AI Capabilities used
 

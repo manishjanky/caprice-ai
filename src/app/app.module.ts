@@ -12,10 +12,12 @@ import { VideoComponent } from './components/video/video.component';
 import { AudioPlayerComponent } from './components/audio-player/audio-player.component';
 import { HeaderComponent } from './components/header/header.component';
 import { CheerMeUpComponent } from './components/cheer-me-up/cheer-me-up.component';
-import { NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbNavModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateArtComponent } from './components/create-art/create-art.component';
 import { FormsModule } from '@angular/forms';
 import { HowAreYouComponent } from './components/how-are-you/how-are-you.component';
+import { AddToPlaylistComponent } from './components/add-to-playlist/add-to-playlist.component';
+import { PlaylistsComponent } from './components/playlists/playlists.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { HowAreYouComponent } from './components/how-are-you/how-are-you.compone
     CheerMeUpComponent,
     CreateArtComponent,
     HowAreYouComponent,
+    AddToPlaylistComponent,
+    PlaylistsComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,8 @@ import { HowAreYouComponent } from './components/how-are-you/how-are-you.compone
     HttpClientModule,
     FormsModule,
     NgbNavModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    NgbDropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -15,9 +15,7 @@ export class MusicService {
   capricePlaylists: any[] = [];
   songSuggestions: any[] = [];
   constructor(private http: HttpClient) {
-    this.capricePlaylists = JSON.parse(
-      localStorage.getItem('caprice_playlists')
-    );
+    this.capricePlaylists = this.getCapricePlaylists();
   }
   searchSong(text: string, page = 1) {
     return this.http.get(
@@ -69,6 +67,10 @@ export class MusicService {
     this.musicPlaying.emit(reason);
   }
 
+  getCapricePlaylists() {
+    return JSON.parse(localStorage.getItem('caprice_playlists') || '[]');
+  }
+
   createPlaylist(name: string) {
     this.capricePlaylists.push({
       name: name,
@@ -82,11 +84,17 @@ export class MusicService {
 
   addSongToPlaylist(song: any, listName?: string) {
     const { name, link, image, by, id } = song;
-    const ind = this.capricePlaylists.findIndex(
+    const ind = this.capricePlaylists?.findIndex(
       (list) => list.name === listName
     );
     if (ind > -1) {
       this.capricePlaylists[ind].songs.push({ name, link, image, by, id });
+    } else {
+      const newList = {
+        name: listName,
+        songs: [{ name, link, image, by, id }],
+      };
+      this.capricePlaylists.push(newList);
     }
     localStorage.setItem(
       'caprice_playlists',

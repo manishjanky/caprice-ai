@@ -1,0 +1,38 @@
+<div class="add-to-playlist p-4">
+    <div class="modal-body">
+        <form (submit)="onSubmit()">
+            <div class="row">
+                <div class="colo-12">
+                    <h5>Please choose a playlist to add to</h5>
+                </div>
+
+                <div class="col-12 mb-3" *ngIf="playlists?.length">
+                    <div ngbDropdown class="d-flex text-start available-lists">
+                        <button type="button" class="btn btn-outline-primary" id="playlists" ngbDropdownToggle>
+                            {{selectedPlaylist?.name || 'Select playlist'}}
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="playlists">
+                            <button class="available-list d-flex align-items-center justify-content-between"
+                                ngbDropdownItem *ngFor="let list of playlists">
+                                <span>{{list.name}}</span>
+                                <span class="badge bg-primary">{{list.songs.length}} Songs</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h6>Or</h6>
+            <div class="row">
+                <div class="col-12">
+                    <input placeholder="Choose a new playlist name" class="form-control" name="newPlaylist"
+                        [(ngModel)]="newPlaylistName">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Add to playlist</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
