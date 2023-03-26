@@ -113,16 +113,25 @@
       color: var(--color-primary-text)
     }
   </style>
-  <link rel="stylesheet" href="styles.ebc5386a99011c75.css" media="print" onload="this.media='all'"><noscript>
+  <link rel="stylesheet" href="styles.ebc5386a99011c75.css" media="print" onload="this.media='all'">
+  <noscript>
     <link rel="stylesheet" href="styles.ebc5386a99011c75.css">
   </noscript>
+  <script>// See http://www.backalleycoder.com/2016/05/13/sghpa-the-single-page-app-hack-for-github-pages/
+    (function () {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect != location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();</script>
 </head>
 
 <body>
   <app-root></app-root>
   <script src="runtime.0354206d069e0b97.js" type="module"></script>
   <script src="polyfills.05ccf758463739bc.js" type="module"></script>
-  <script src="main.40e502200337212b.js" type="module"></script>
+  <script src="main.6802a498c59cd214.js" type="module"></script>
 
 </body>
 
