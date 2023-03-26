@@ -200,7 +200,6 @@ export class AudioPlayerComponent
     if (currentIndex > -1 && currentIndex < this.history.length - 1) {
       this.audio = this.audioList[currentIndex];
     } else {
-      currentIndex = this.audioList.indexOf(this.audio);
       if (currentIndex > -1 && currentIndex < this.audioList.length - 1) {
         this.audio = this.audioList[currentIndex];
       }
