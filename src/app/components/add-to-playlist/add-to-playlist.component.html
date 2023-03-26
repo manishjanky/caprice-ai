@@ -10,7 +10,7 @@
                     <div class="d-flex text-start available-lists">
                         <select name="selectedPlaylist" [(ngModel)]="selectedPlaylist" class="form-select" aria-label="Default select example">
                             <option selected>Select playlist</option>
-                            <option *ngFor="let list of playlists">
+                            <option [ngValue]="list" *ngFor="let list of playlists">
                                 <span>{{list.name}}</span>
                                 <span class="badge bg-primary"> - {{list.songs.length}} Songs</span>
                             </option>

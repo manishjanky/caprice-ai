@@ -1,6 +1,6 @@
 <div class="playlists m-1">
-    <div *ngFor="let list of myPlaylists" class="row m-0">
-        <div class="col-6 col-md-4 shadow rounded" (click)="playList(list)">
+    <div class="row m-0">
+        <div *ngFor="let list of myPlaylists" class="col-6 col-md-4 shadow rounded" (click)="playList(list)">
             <div class="row">
                 <div class="col-4">
                     <div class="d-flex image-container  align-items-center justify-content-center">
