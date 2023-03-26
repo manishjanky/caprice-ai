@@ -51,6 +51,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   gestureInterval: any;
   videoMessage: string;
   detectingEmotion = true;
+  showMesh = true;
   constructor(
     private videoService: VideoService,
     private emotionService: EmotionService,
@@ -82,7 +83,17 @@ export class VideoComponent implements OnInit, OnDestroy {
   ) {
     this.gestureCanvasElement = ref?.nativeElement;
   }
-  ngOnInit() {
+
+  get videoExpression() {
+    return this.emotionService.getMax(
+      this.emotionService.videoEmotion?.expressions
+    );
+  }
+  get textExpression() {
+    return this.emotionService.textEmotion;
+  }
+  async ngOnInit() {
+    await this.setUpFaceMesh();
     this.videoService.askCameraPermission();
     this.videoService.detectedGesture.subscribe((gesture) => {
       if (gesture.categoryName && gesture.categoryName !== GESTURE_TYPES.None) {
@@ -105,9 +116,6 @@ export class VideoComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.videoMessage = '';
         }, 2000);
-      } else {
-        await this.setUpFaceMesh();
-        this.detectEmotion();
       }
     });
   }
@@ -124,7 +132,7 @@ export class VideoComponent implements OnInit, OnDestroy {
     this.videoMessage = VIDEO_PROCESSING_MESSAGE.detectingExpression;
     setTimeout(async () => {
       await this.emotionService.detectFaceExpression(this.videoElement);
-      this.checkToDrawMesh();
+      // this.checkToDrawMesh();
     }, 500);
   }
 
@@ -149,6 +157,11 @@ export class VideoComponent implements OnInit, OnDestroy {
     this.faceMesh.setOptions(FaceMeshConfig);
     this.faceMesh.onResults((results: Results) => {
       this.faceMeshResult = results;
+      if (this.showMesh) {
+        this.drawMesh(false);
+      } else {
+        this.clearFaceMesh();
+      }
     });
     const camera = new Camera(this.videoElement, {
       onFrame: async () => {
@@ -204,10 +217,10 @@ export class VideoComponent implements OnInit, OnDestroy {
           color: '#ff3030',
         });
         drawConnectors(ctx, landmarks, FACEMESH_LEFT_EYE, {
-          color: '#30ff30',
+          color: '#ff3030',
         });
         drawConnectors(ctx, landmarks, FACEMESH_LEFT_EYEBROW, {
-          color: '#30ff30',
+          color: '#ff3030',
         });
         drawConnectors(ctx, landmarks, FACEMESH_FACE_OVAL, {
           color: '#e0e0e0',
@@ -288,6 +301,10 @@ export class VideoComponent implements OnInit, OnDestroy {
       }
     }
     ctx.restore();
+  }
+
+  toggleMesh() {
+    this.showMesh = !this.showMesh;
   }
 
   ngOnDestroy(): void {

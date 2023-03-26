@@ -75,9 +75,10 @@ export class AudioPlayerComponent
         this.handleGesture(gesture);
       }
     });
-    this.speechSerice.speak(educateMessage, () => {
-      this.educate(0);
-    });
+    this.play();
+    // this.speechSerice.speak(educateMessage, () => {
+    //   this.educate(0);
+    // });
 
     this.musicService.musicPlaying.subscribe((action) => {
       switch (action) {
@@ -102,7 +103,6 @@ export class AudioPlayerComponent
     }
     if (startIndex >= MUSIC_CONTROL_ACTIONS.length) {
       this.educating = false;
-      this.play();
       return;
     }
     this.speechSerice.speak(MUSIC_CONTROL_ACTIONS[startIndex], () => {
@@ -241,5 +241,6 @@ export class AudioPlayerComponent
 
   showHandSingnals() {
     this.modalService.open(this.handSignals);
+    this.educate(0);
   }
 }
