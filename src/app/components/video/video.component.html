@@ -23,9 +23,10 @@
             </p>
         </div>
 
-        <div *ngIf="videoExpression" class="col-12">
-            <button type="button" class="btn btn-light" (click)="toggleMesh()">{{showMesh?'Hide': 'Draw'}} face
+        <div *ngIf="videoExpression" class="col-12 d-flex">
+            <button type="button" class="btn btn-light m-1" (click)="toggleMesh()">{{showMesh?'Hide': 'Draw'}} face
                 mesh</button>
+            <button type="button" class="btn btn-light m-1" (click)="detectEmotion()">Re-detect video emotion</button>
         </div>
     </div>
 </ng-container>
