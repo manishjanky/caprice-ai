@@ -93,7 +93,6 @@ export class VideoComponent implements OnInit, OnDestroy {
     return this.emotionService.textEmotion;
   }
   async ngOnInit() {
-    await this.setUpFaceMesh();
     this.videoService.askCameraPermission();
     this.videoService.detectedGesture.subscribe((gesture) => {
       if (gesture.categoryName && gesture.categoryName !== GESTURE_TYPES.None) {
@@ -120,30 +119,30 @@ export class VideoComponent implements OnInit, OnDestroy {
     });
   }
 
-  setElementRefs() {
+  async setElementRefs() {
     this.videoService.videoElement = this.videoElement;
     this.videoService.canvasElement = this.canvasElement;
-    // if (this.videoElement && this.canvasElement && !this.gestureRecognizer) {
-
-    // }
+    if (this.canvasElement) {
+      await this.setUpFaceMesh();
+      await this.initGestures();
+    }
   }
 
   async detectEmotion() {
     this.videoMessage = VIDEO_PROCESSING_MESSAGE.detectingExpression;
     setTimeout(async () => {
       await this.emotionService.detectFaceExpression(this.videoElement);
-      // this.checkToDrawMesh();
     }, 500);
   }
 
-  checkToDrawMesh() {
-    const interval = setInterval(() => {
-      if (this.faceMeshResult) {
-        this.drawMesh();
-        clearInterval(interval);
-      }
-    }, 100);
-  }
+  // checkToDrawMesh() {
+  //   const interval = setInterval(() => {
+  //     if (this.faceMeshResult) {
+  //       this.drawMesh();
+  //       clearInterval(interval);
+  //     }
+  //   }, 100);
+  // }
   async setUpFaceMesh() {
     if (isSafari()) {
       return;
@@ -157,8 +156,8 @@ export class VideoComponent implements OnInit, OnDestroy {
     this.faceMesh.setOptions(FaceMeshConfig);
     this.faceMesh.onResults((results: Results) => {
       this.faceMeshResult = results;
-      if (this.showMesh) {
-        this.drawMesh(false);
+      if (this.showMesh && this.canvasElement) {
+        this.drawMesh();
       } else {
         this.clearFaceMesh();
       }
@@ -241,7 +240,6 @@ export class VideoComponent implements OnInit, OnDestroy {
     if (clear) {
       setTimeout(async () => {
         this.clearFaceMesh();
-        await this.initGestures();
       }, 2000);
     }
   }
