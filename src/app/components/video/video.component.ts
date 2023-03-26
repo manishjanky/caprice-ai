@@ -52,6 +52,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   videoMessage: string;
   detectingEmotion = true;
   showMesh = true;
+  meshCamera: any;
   constructor(
     private videoService: VideoService,
     private emotionService: EmotionService,
@@ -139,6 +140,17 @@ export class VideoComponent implements OnInit, OnDestroy {
     if (isSafari()) {
       return;
     }
+    this.resetFaceMesh();
+    this.meshCamera = new Camera(this.videoElement, {
+      onFrame: async () => {
+        await this.faceMesh?.send({ image: this.videoElement });
+      },
+      width: this.videoElement.clientWidth,
+      height: this.videoElement.clientHeight,
+    });
+    this.meshCamera.start();
+  }
+  async resetFaceMesh() {
     const config = {
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${VERSION}/${file}`;
@@ -150,18 +162,8 @@ export class VideoComponent implements OnInit, OnDestroy {
       this.faceMeshResult = results;
       if (this.showMesh && this.canvasElement) {
         this.drawMesh();
-      } else {
-        this.clearFaceMesh();
       }
     });
-    const camera = new Camera(this.videoElement, {
-      onFrame: async () => {
-        await this.faceMesh.send({ image: this.videoElement });
-      },
-      width: this.videoElement.clientWidth,
-      height: this.videoElement.clientHeight,
-    });
-    camera.start();
   }
   clearFaceMesh() {
     const ctx = this.canvasElement.getContext('2d');
@@ -293,8 +295,13 @@ export class VideoComponent implements OnInit, OnDestroy {
     ctx.restore();
   }
 
-  toggleMesh() {
+  async toggleMesh() {
     this.showMesh = !this.showMesh;
+    if (this.showMesh) {
+      await this.faceMesh.send({ image: this.videoElement });
+    } else {
+      this.resetFaceMesh();
+    }
   }
 
   ngOnDestroy(): void {
