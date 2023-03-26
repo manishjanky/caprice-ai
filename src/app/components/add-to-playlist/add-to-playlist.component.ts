@@ -1,5 +1,5 @@
 import { MusicService } from './../../services/music.service';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-add-to-playlist',
@@ -11,7 +11,7 @@ export class AddToPlaylistComponent implements OnInit {
   newPlaylistName: any;
   playlists: any[] = [];
   @Output() submit = new EventEmitter<any>();
-  constructor(private musicService: MusicService) {
+  constructor(private musicService: MusicService, private cdref: ChangeDetectorRef) {
     this.playlists = this.musicService.getCapricePlaylists();
   }
 
@@ -21,5 +21,9 @@ export class AddToPlaylistComponent implements OnInit {
     if (this.selectedPlaylist || this.newPlaylistName) {
       this.submit.emit(this.selectedPlaylist || { name: this.newPlaylistName });
     }
+  }
+
+  openChange(){
+    this.cdref.detectChanges();
   }
 }

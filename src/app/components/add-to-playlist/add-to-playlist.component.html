@@ -7,21 +7,18 @@
                 </div>
 
                 <div class="col-12 mb-3" *ngIf="playlists?.length">
-                    <div ngbDropdown class="d-flex text-start available-lists">
-                        <button type="button" class="btn btn-outline-primary" id="playlists" ngbDropdownToggle>
-                            {{selectedPlaylist?.name || 'Select playlist'}}
-                        </button>
-                        <div ngbDropdownMenu aria-labelledby="playlists">
-                            <button class="available-list d-flex align-items-center justify-content-between"
-                                ngbDropdownItem *ngFor="let list of playlists">
+                    <div class="d-flex text-start available-lists">
+                        <select name="selectedPlaylist" [(ngModel)]="selectedPlaylist" class="form-select" aria-label="Default select example">
+                            <option selected>Select playlist</option>
+                            <option *ngFor="let list of playlists">
                                 <span>{{list.name}}</span>
-                                <span class="badge bg-primary">{{list.songs.length}} Songs</span>
-                            </button>
-                        </div>
+                                <span class="badge bg-primary"> - {{list.songs.length}} Songs</span>
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
-            <h6>Or</h6>
+            <h6 *ngIf="playlists?.length">Or</h6>
             <div class="row">
                 <div class="col-12">
                     <input placeholder="Choose a new playlist name" class="form-control" name="newPlaylist"
