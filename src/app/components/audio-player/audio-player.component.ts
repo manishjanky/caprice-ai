@@ -164,7 +164,7 @@ export class AudioPlayerComponent
     if (!this.educating) {
       this.play();
     }
-    if (changes && changes['playingIndex'].currentValue >= 0 && changes['playingIndex'].currentValue !== changes['playingIndex'].previousValue) {
+    if (changes && changes['playingIndex'] && changes['playingIndex'].currentValue >= 0 && changes['playingIndex'].currentValue !== changes['playingIndex'].previousValue) {
       this.pickASong(changes['playingIndex'].currentValue);
     }
   }
