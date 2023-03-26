@@ -43,7 +43,7 @@ export class AudioPlayerComponent
   history: any[] = [];
   audio: any;
   volume: number = 8;
-  educating = true;
+  educating = false;
   activeVolumeWidth: string | number;
   constructor(
     private videoService: VideoService,
