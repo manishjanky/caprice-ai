@@ -15,6 +15,7 @@ export class MusicService {
   musicSuggestions = new BehaviorSubject(null);
   capricePlaylists: any[] = [];
   songSuggestions: any[] = [];
+  playPlaylist = new EventEmitter<any>();
   constructor(private http: HttpClient) {
     this.capricePlaylists = this.getCapricePlaylists();
   }
@@ -112,17 +113,16 @@ export class MusicService {
     songs?.forEach((song) => {
       const images = song?.image;
       song.by = song?.primaryArtists;
-      if (images && images.length > 0) {
+      if (images && images.length > 0 && Array.isArray(images)) {
         const url = images[images.length - 1]?.link;
         if (url) {
           song.image = url || '/assets/images/audio_player.jpeg';
         }
       }
-      if (song.image)
-        if (song.downloadUrl) {
-          song.link = song?.downloadUrl[song?.downloadUrl?.length - 1]?.link;
-          songsList.push(song);
-        }
+      if (song.downloadUrl) {
+        song.link = song?.downloadUrl[song?.downloadUrl?.length - 1]?.link;
+        songsList.push(song);
+      }
     });
     return songsList;
   }

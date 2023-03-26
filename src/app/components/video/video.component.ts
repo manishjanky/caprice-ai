@@ -135,14 +135,6 @@ export class VideoComponent implements OnInit, OnDestroy {
     }, 500);
   }
 
-  // checkToDrawMesh() {
-  //   const interval = setInterval(() => {
-  //     if (this.faceMeshResult) {
-  //       this.drawMesh();
-  //       clearInterval(interval);
-  //     }
-  //   }, 100);
-  // }
   async setUpFaceMesh() {
     if (isSafari()) {
       return;

@@ -1,5 +1,10 @@
 import { MusicService } from './../../services/music.service';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 
 @Component({
   selector: 'app-playlists',
@@ -8,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlaylistsComponent implements OnInit {
   myPlaylists: any[] = [];
-
+  play = new EventEmitter<any>();
   constructor(private musicService: MusicService) {
     this.getPlaylists();
   }
@@ -21,5 +26,9 @@ export class PlaylistsComponent implements OnInit {
 
   getPlaylists() {
     this.myPlaylists = this.musicService.getCapricePlaylists();
+  }
+
+  playList(list) {
+    this.musicService.playPlaylist.emit(list);
   }
 }

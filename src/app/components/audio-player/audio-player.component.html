@@ -40,10 +40,8 @@
     data-bs-target="#handSingnaControls">
     Music control hand singnals
 </button>
-<div class="row">
-    <div class="col-12">
-        <app-playlists></app-playlists>
-    </div>
+<div class="playlists">
+    <app-playlists (play)="playPlaylist($event)"></app-playlists>
 </div>
 
 <div class="audio-player">

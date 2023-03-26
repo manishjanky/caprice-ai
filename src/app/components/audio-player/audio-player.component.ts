@@ -78,9 +78,10 @@ export class AudioPlayerComponent
       }
     });
     this.play();
-    // this.speechSerice.speak(educateMessage, () => {
-    //   this.educate(0);
-    // });
+
+    this.musicService.playPlaylist.subscribe((list) => {
+      this.playPlaylist(list);
+    });
 
     this.musicService.musicPlaying.subscribe((action) => {
       switch (action) {
@@ -258,6 +259,15 @@ export class AudioPlayerComponent
 
   showHandSingnals() {
     this.modalService.open(this.handSignals);
-    this.educate(0);
+    this.speechSerice.speak(educateMessage, () => {
+      this.educate(0);
+    });
+  }
+
+  playPlaylist(list) {
+    const count = this.audioList.length;
+    this.audioList = [...this.audioList, ...list?.songs];
+    this.audio = this.audioList[count];
+    this.play();
   }
 }
